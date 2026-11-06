@@ -1,5 +1,5 @@
 import type { ZodType } from "zod";
-import type { Interview, Turn, CodeSnapshot, Report } from "@testmeman/contracts";
+import type { Interview, Turn, CodeSnapshot, Report, Phase } from "@testmeman/contracts";
 
 /**
  * Talks to an LLM.
@@ -10,6 +10,7 @@ export interface AIModel {
   chat(input: {
     system: string;
     messages: { role: "interviewer" | "candidate"; text: string }[];
+    phase: Phase; // Add phase here
     signal?: AbortSignal;
   }): AsyncIterable<string>;
 
@@ -33,7 +34,15 @@ export interface CodeRunner {
     tests: { input: string; expected: string; hidden: boolean }[];
     timeLimitMs?: number;
   }): Promise<{
-    results: { passed: boolean; stdout: string; stderr: string; timeMs: number; hidden: boolean }[];
+    results: {
+      passed: boolean;
+      stdout: string;
+      stderr: string;
+      timeMs: number;
+      hidden: boolean;
+      input?: string;
+      expected?: string;
+    }[];
     compileError?: string;
   }>;
 }

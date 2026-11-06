@@ -13,11 +13,12 @@ export class FakeModel implements AIModel {
   async *chat(input: {
     system: string;
     messages: { role: "interviewer" | "candidate"; text: string }[];
+    phase: Phase;
     signal?: AbortSignal;
   }): AsyncIterable<string> {
     this.turnCount++;
 
-    const phase = this.determinePhaseFromContext(input.messages);
+    const phase = input.phase;
     this.currentPhase = phase;
 
     let response = "";

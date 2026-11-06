@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 export default defineConfig({
   test: {
     globals: true,
-    include: ["packages/**/test/**/*.test.ts"],
+    include: ["packages/**/test/**/*.test.ts", "apps/**/test/**/*.test.ts"],
     environment: "node",
     allowOnly: true,
   },

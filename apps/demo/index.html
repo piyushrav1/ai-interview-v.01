@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TestMeMan AI Interviewer Demo</title>
+    <!-- Tailwind CSS CDN fallback for instant styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {}
+        }
+      }
+    </script>
+    <script>
+      window.addEventListener('error', function(e) {
+        var el = document.createElement('div');
+        el.style.cssText = 'color:red;background:#fff;padding:20px;font-family:monospace;white-space:pre-wrap;position:fixed;top:0;left:0;right:0;z-index:99999;';
+        el.textContent = 'WINDOW ERROR: ' + e.message + '\nAt: ' + e.filename + ':' + e.lineno + '\n' + (e.error ? e.error.stack : '');
+        document.body.appendChild(el);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var el = document.createElement('div');
+        el.style.cssText = 'color:red;background:#fff;padding:20px;font-family:monospace;white-space:pre-wrap;position:fixed;top:0;left:0;right:0;z-index:99999;';
+        el.textContent = 'PROMISE REJECTION: ' + (e.reason ? (e.reason.stack || e.reason) : e);
+        document.body.appendChild(el);
+      });
+    </script>
+    <style>
+      body {
+        margin: 0;
+        background-color: #030712;
+        color: #f3f4f6;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-950 text-gray-100 min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

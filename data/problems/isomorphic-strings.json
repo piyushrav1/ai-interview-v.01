@@ -1,0 +1,41 @@
+{
+  "slug": "isomorphic-strings",
+  "title": "Isomorphic Strings",
+  "difficulty": "easy",
+  "statement": "Two strings s and t are isomorphic if the characters in s can be replaced to get t. All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.",
+  "examples": [
+    {
+      "input": "s = \"egg\", t = \"add\"",
+      "output": "true",
+      "explanation": "e maps to a, and g maps to d."
+    },
+    {
+      "input": "s = \"foo\", t = \"bar\"",
+      "output": "false",
+      "explanation": "o cannot map to both a and r."
+    },
+    {
+      "input": "s = \"paper\", t = \"title\"",
+      "output": "true",
+      "explanation": "p maps to t, a maps to i, e maps to l, r maps to e."
+    }
+  ],
+  "tests": [
+    { "input": "\"egg\"\n\"add\"", "expected": "true", "hidden": false },
+    { "input": "\"foo\"\n\"bar\"", "expected": "false", "hidden": false },
+    { "input": "\"paper\"\n\"title\"", "expected": "true", "hidden": false },
+    { "input": "\"badc\"\n\"baba\"", "expected": "false", "hidden": true },
+    { "input": "\"a\"\n\"a\"", "expected": "true", "hidden": true },
+    { "input": "\"ab\"\n\"aa\"", "expected": "false", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def is_isomorphic(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
+    "javascript": "function isIsomorphic(s, t) {\n    // Write your solution here\n}",
+    "cpp": "bool isIsomorphic(string s, string t) {\n    // Write your solution here\n}",
+    "java": "public boolean isIsomorphic(String s, String t) {\n    // Write your solution here\n}",
+    "c": "bool isIsomorphic(char* s, char* t) {\n    // Write your solution here\n}"
+  },
+  "topics": ["strings", "hash-table"],
+  "timeLimitMs": 2000
+}
+

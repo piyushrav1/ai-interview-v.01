@@ -30,6 +30,7 @@ export const InterviewSchema = z.object({
   startTime: z.number().int(),
   endTime: z.number().int().nullable(),
   timeLimitMs: z.number().int(),
+  problemSlug: z.string().default("valid-anagram"),
 });
 
 export type Interview = z.infer<typeof InterviewSchema>;

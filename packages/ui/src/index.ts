@@ -1,3 +1,9 @@
-// UI package entry point.
-// React 19 + Tailwind 4 components. Depends only on @testmeman/contracts.
-// Components are added here as they are written.
+export { InterviewRoom } from "./InterviewRoom.js";
+export { CodeEditor } from "./components/CodeEditor.js";
+export type { CodeEditorProps } from "./components/CodeEditor.js";
+export { Timer } from "./components/Timer.js";
+export type { TimerProps } from "./components/Timer.js";
+export { ReportView } from "./components/ReportView.js";
+export type { ReportViewProps } from "./components/ReportView.js";
+export { MarkdownMessage } from "./components/MarkdownMessage.js";
+export type { MarkdownMessageProps } from "./components/MarkdownMessage.js";

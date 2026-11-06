@@ -13,10 +13,15 @@ const PHASE_ORDER: Phase[] = [
 ];
 
 /** Create a new interview in the 'plan' phase. */
-export function createInterview(params: { role: string; language: Language }): { id: string; phase: Phase } {
+export function createInterview(params: { role: string; language: Language; problemSlug?: string }): {
+  id: string;
+  phase: Phase;
+  problemSlug: string;
+} {
   return {
     id: crypto.randomUUID(),
     phase: PhaseEnum.plan,
+    problemSlug: params.problemSlug ?? "valid-anagram",
   };
 }
 

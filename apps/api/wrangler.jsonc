@@ -3,9 +3,11 @@
   "compatibility_date": "2024-11-15",
   "node_compat": true,
   "main": "src/index.ts",
-  "env": {
-    "dev": {
-      "database_url": "postgres://postgres:postgres@localhost:5432/interviewer"
-    }
+  "vars": {
+    "GEMINI_API_KEY": "",
+    "GEMINI_MODEL_INTERVIEWER": "gemini-3.1-flash-lite",
+    "GEMINI_MODEL_EVALUATOR": "gemini-3.1-flash-lite",
+    "CODE_RUNNER": "judge0",
+    "JUDGE0_URL": "http://127.0.0.1:2358"
   }
 }

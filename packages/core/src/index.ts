@@ -4,3 +4,4 @@
 export * from "./adapters.js";
 export * from "./machine/index.js";
 export * from "./prompts/v1/index.js";
+export * from "./problems/index.js";

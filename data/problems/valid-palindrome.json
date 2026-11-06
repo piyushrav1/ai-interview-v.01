@@ -1,0 +1,41 @@
+{
+  "slug": "valid-palindrome",
+  "title": "Valid Palindrome",
+  "difficulty": "easy",
+  "statement": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
+  "examples": [
+    {
+      "input": "s = \"A man, a plan, a canal: Panama\"",
+      "output": "true",
+      "explanation": "\"amanaplanacanalpanama\" is a palindrome."
+    },
+    {
+      "input": "s = \"race a car\"",
+      "output": "false",
+      "explanation": "\"raceacar\" is not a palindrome."
+    },
+    {
+      "input": "s = \" \"",
+      "output": "true",
+      "explanation": "An empty string \"\" reads the same forward and backward."
+    }
+  ],
+  "tests": [
+    { "input": "\"A man, a plan, a canal: Panama\"", "expected": "true", "hidden": false },
+    { "input": "\"race a car\"", "expected": "false", "hidden": false },
+    { "input": "\" \"", "expected": "true", "hidden": false },
+    { "input": "\"0P\"", "expected": "false", "hidden": true },
+    { "input": "\"a.\"", "expected": "true", "hidden": true },
+    { "input": "\"ab_a\"", "expected": "true", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def is_palindrome(s: str) -> bool:\n    # Write your solution here\n    pass",
+    "javascript": "function isPalindrome(s) {\n    // Write your solution here\n}",
+    "cpp": "bool isPalindrome(std::string s) {\n    // Write your solution here\n}",
+    "java": "public boolean isPalindrome(String s) {\n    // Write your solution here\n}",
+    "c": "bool isPalindrome(char* s) {\n    // Write your solution here\n}"
+  },
+  "topics": ["strings", "two-pointers"],
+  "timeLimitMs": 2000
+}
+

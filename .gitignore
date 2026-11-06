@@ -1,6 +1,7 @@
 # Environment
 .env
 .env.*.local
+.dev.vars
 
 # Node / pnpm
 node_modules/

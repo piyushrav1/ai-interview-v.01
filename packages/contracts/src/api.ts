@@ -6,6 +6,7 @@ import { ReportSchema } from "./report.js";
 export const StartInterviewRequest = z.object({
   role: z.string(),
   language: z.enum(["python", "cpp", "c", "java", "javascript"] as const),
+  problemSlug: z.string().optional(),
 });
 
 export const StartInterviewResponse = z.object({
@@ -16,6 +17,7 @@ export const StartInterviewResponse = z.object({
 export const GetInterviewResponse = z.object({
   id: z.string().uuid(),
   phase: z.nativeEnum(PhaseEnum),
+  problemSlug: z.string().optional(),
   transcript: z.array(
     z.object({
       id: z.number().int(),
@@ -38,7 +40,7 @@ export const SubmitMessageRequest = z.object({
   text: z.string(),
 });
 
-export const MessageEventType = z.enum(["delta", "turn", "phase", "done"]);
+export const MessageEventType = z.enum(["delta", "turn", "phase", "starterCode", "done"]);
 
 export const MessageEvent = z.object({
   type: MessageEventType,
@@ -60,6 +62,8 @@ export const RunCodeResponse = z.object({
       stderr: z.string(),
       timeMs: z.number().int(),
       hidden: z.boolean(),
+      input: z.string().optional(),
+      expected: z.string().optional(),
     })
   ),
   compileError: z.string().optional(),

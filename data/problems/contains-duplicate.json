@@ -1,0 +1,42 @@
+{
+  "slug": "contains-duplicate",
+  "title": "Contains Duplicate",
+  "difficulty": "easy",
+  "statement": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+  "examples": [
+    {
+      "input": "nums = [1, 2, 3, 1]",
+      "output": "true",
+      "explanation": "The element 1 occurs at index 0 and index 3."
+    },
+    {
+      "input": "nums = [1, 2, 3, 4]",
+      "output": "false",
+      "explanation": "All elements are distinct."
+    },
+    {
+      "input": "nums = [1, 1, 1, 3, 3, 4, 3, 2, 4, 2]",
+      "output": "true",
+      "explanation": "Multiple elements appear more than once."
+    }
+  ],
+  "tests": [
+    { "input": "[1, 2, 3, 1]", "expected": "true", "hidden": false },
+    { "input": "[1, 2, 3, 4]", "expected": "false", "hidden": false },
+    { "input": "[1, 1, 1, 3, 3, 4, 3, 2, 4, 2]", "expected": "true", "hidden": false },
+    { "input": "[]", "expected": "false", "hidden": true },
+    { "input": "[42]", "expected": "false", "hidden": true },
+    { "input": "[0, 0]", "expected": "true", "hidden": true },
+    { "input": "[-1, -2, -3, -1]", "expected": "true", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def contains_duplicate(nums: list[int]) -> bool:\n    # Write your solution here\n    pass",
+    "javascript": "function containsDuplicate(nums) {\n    // Write your solution here\n}",
+    "cpp": "bool containsDuplicate(std::vector<int>& nums) {\n    // Write your solution here\n}",
+    "java": "public boolean containsDuplicate(int[] nums) {\n    // Write your solution here\n}",
+    "c": "bool containsDuplicate(int* nums, int numsSize) {\n    // Write your solution here\n}"
+  },
+  "topics": ["arrays", "hash-table", "sorting"],
+  "timeLimitMs": 2000
+}
+

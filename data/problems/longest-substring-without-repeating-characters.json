@@ -1,0 +1,41 @@
+{
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "medium",
+  "statement": "Given a string s, find the length of the longest substring without repeating characters. A substring is a contiguous non-empty sequence of characters within a string.",
+  "examples": [
+    {
+      "input": "s = \"abcabcbb\"",
+      "output": "3",
+      "explanation": "The answer is \"abc\", with the length of 3."
+    },
+    {
+      "input": "s = \"bbbbb\"",
+      "output": "1",
+      "explanation": "The answer is \"b\", with the length of 1."
+    },
+    {
+      "input": "s = \"pwwkew\"",
+      "output": "3",
+      "explanation": "The answer is \"wke\", with the length of 3."
+    }
+  ],
+  "tests": [
+    { "input": "\"abcabcbb\"", "expected": "3", "hidden": false },
+    { "input": "\"bbbbb\"", "expected": "1", "hidden": false },
+    { "input": "\"pwwkew\"", "expected": "3", "hidden": false },
+    { "input": "\"\"", "expected": "0", "hidden": true },
+    { "input": "\" \"", "expected": "1", "hidden": true },
+    { "input": "\"dvdf\"", "expected": "3", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def length_of_longest_substring(s: str) -> int:\n    # Write your solution here\n    pass",
+    "javascript": "function lengthOfLongestSubstring(s) {\n    // Write your solution here\n}",
+    "cpp": "int lengthOfLongestSubstring(std::string s) {\n    // Write your solution here\n}",
+    "java": "public int lengthOfLongestSubstring(String s) {\n    // Write your solution here\n}",
+    "c": "int lengthOfLongestSubstring(char* s) {\n    // Write your solution here\n}"
+  },
+  "topics": ["strings", "sliding-window", "hash-table"],
+  "timeLimitMs": 2000
+}
+

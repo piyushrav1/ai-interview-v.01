@@ -1,0 +1,36 @@
+{
+  "slug": "valid-anagram",
+  "title": "Valid Anagram",
+  "difficulty": "easy",
+  "statement": "Given two strings s and t, return true if t is an anagram of s, and false otherwise. An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+  "examples": [
+    {
+      "input": "s = \"anagram\", t = \"nagaram\"",
+      "output": "true",
+      "explanation": "Both strings contain the exact same characters with the same frequencies."
+    },
+    {
+      "input": "s = \"rat\", t = \"car\"",
+      "output": "false",
+      "explanation": "The characters do not match ('r' vs 'c')."
+    }
+  ],
+  "tests": [
+    { "input": "\"anagram\"\n\"nagaram\"", "expected": "true", "hidden": false },
+    { "input": "\"rat\"\n\"car\"", "expected": "false", "hidden": false },
+    { "input": "\"listen\"\n\"silent\"", "expected": "true", "hidden": true },
+    { "input": "\"ab\"\n\"a\"", "expected": "false", "hidden": true },
+    { "input": "\"aacc\"\n\"ccac\"", "expected": "false", "hidden": true },
+    { "input": "\"a\"\n\"a\"", "expected": "true", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def is_anagram(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
+    "javascript": "function isAnagram(s, t) {\n    // Write your solution here\n}",
+    "cpp": "bool isAnagram(string s, string t) {\n    // Write your solution here\n}",
+    "java": "public boolean isAnagram(String s, String t) {\n    // Write your solution here\n}",
+    "c": "bool isAnagram(char* s, char* t) {\n    // Write your solution here\n}"
+  },
+  "topics": ["strings", "hash-table", "sorting"],
+  "timeLimitMs": 2000
+}
+
