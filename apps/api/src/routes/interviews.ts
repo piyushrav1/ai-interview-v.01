@@ -379,8 +379,12 @@ export function interviews(adapters: Adapters): Hono {
       submittedAt: Date.now(),
     };
 
-    // If currently in coding or problem phase, automatically advance to followUps
-    if (interview.phase === PhaseEnum.coding || interview.phase === PhaseEnum.problem) {
+    // If currently in intro, problem, or coding phase, advance to followUps on submit
+    if (
+      interview.phase === PhaseEnum.coding ||
+      interview.phase === PhaseEnum.problem ||
+      interview.phase === PhaseEnum.intro
+    ) {
       (interview as { phase: Phase }).phase = PhaseEnum.followUps;
     }
 
