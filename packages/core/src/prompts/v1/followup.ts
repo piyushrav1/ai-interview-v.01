@@ -1,4 +1,4 @@
-import type { Language, CodeSnapshot, Turn } from "@testmeman/contracts";
+import type { Language, CodeSnapshot } from "@testmeman/contracts";
 import { TurnRoleEnum } from "@testmeman/contracts";
 
 /** Build follow-up questions based on code and test results. */

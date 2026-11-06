@@ -1,10 +1,8 @@
-import type { Language, Turn } from "@testmeman/contracts";
 import { TurnRoleEnum } from "@testmeman/contracts";
-import type { InterviewState } from "../../machine/types.js";
 
 /** Build the intro prompt for the interviewer. */
 export function buildIntroPrompt(params: {
-  language: Language;
+  language: string;
   role: string;
   startTime: number;
 }): { system: string; messages: { role: "interviewer" | "candidate"; text: string }[] } {

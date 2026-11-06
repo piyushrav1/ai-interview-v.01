@@ -1,4 +1,4 @@
-import type { Report, RubricDimension, Language, CodeSnapshot } from "@testmeman/contracts";
+import type { Report, Language, CodeSnapshot } from "@testmeman/contracts";
 import { RubricDimensionEnum } from "@testmeman/contracts";
 import { z } from "zod";
 

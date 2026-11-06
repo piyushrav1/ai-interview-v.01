@@ -1,4 +1,4 @@
-import type { Phase, Turn, CodeSnapshot, Interview } from "@testmeman/contracts";
+import type { Phase, CodeSnapshot, Interview } from "@testmeman/contracts";
 
 export interface InterviewState extends Interview {
   phase: Phase;
