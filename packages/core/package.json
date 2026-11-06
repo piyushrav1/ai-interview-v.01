@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src test",
     "test": "vitest run",
-    "test:golden": "vitest run test/golden"
+    "test:golden": "vitest run test/golden",
+    "test:sla": "vitest run test/benchmark"
   },
   "dependencies": {
     "@testmeman/contracts": "workspace:*",

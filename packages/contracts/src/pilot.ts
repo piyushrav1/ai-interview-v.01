@@ -56,3 +56,29 @@ export const PilotCohortReportSchema = z.object({
 });
 
 export type PilotCohortReport = z.infer<typeof PilotCohortReportSchema>;
+
+export const SlaLatencyPercentilesSchema = z.object({
+  p50: z.number(),
+  p90: z.number(),
+  p95: z.number(),
+  p99: z.number(),
+  min: z.number(),
+  max: z.number(),
+  mean: z.number(),
+});
+
+export type SlaLatencyPercentiles = z.infer<typeof SlaLatencyPercentilesSchema>;
+
+export const SlaComplianceReportSchema = z.object({
+  testedAt: z.string(),
+  ttftTargetMs: z.number().default(1500),
+  evalTargetMs: z.number().default(60000),
+  ttftPercentiles: SlaLatencyPercentilesSchema,
+  evalDurationMs: z.number(),
+  meetsTtftSla: z.boolean(),
+  meetsEvalSla: z.boolean(),
+  overallSlaCompliant: z.boolean(),
+  summary: z.string(),
+});
+
+export type SlaComplianceReport = z.infer<typeof SlaComplianceReportSchema>;

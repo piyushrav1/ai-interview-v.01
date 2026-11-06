@@ -7,7 +7,7 @@
 ## Progress Overview
 
 - [x] **Phase 1: Pilot Evaluation & Human-AI Correlation Engine (`packages/core/src/pilot.ts`)**
-- [ ] **Phase 2: SLA Benchmark Suite & Latency Verification (`packages/core/test/benchmark/sla.test.ts`)**
+- [x] **Phase 2: SLA Benchmark Suite & Latency Verification (`packages/core/test/benchmark/sla.test.ts`)**
 - [ ] **Phase 3: Durable SQL Database Persistence & Migration Tooling (`apps/api/src/db/`)**
 - [ ] **Phase 4: Standardized Scorecard Export & Shareable Links (`packages/ui` & `apps/api`)**
 - [ ] **Phase 5: Golden Verification, CI Integration & Production Hardening**
@@ -87,24 +87,24 @@ flowchart TD
 ---
 
 ### Phase 2: SLA Benchmark Suite & Latency Verification (`packages/core/test/benchmark/sla.test.ts`)
-- [ ] **2.1 Time-to-First-Token (TTFT) Benchmark Suite**
-  - [ ] Measure streaming response latency across representative candidate prompts:
+- [x] **2.1 Time-to-First-Token (TTFT) Benchmark Suite**
+  - [x] Measure streaming response latency across representative candidate prompts:
     - Greeting / Introduction turn.
     - Syntax clarification query.
     - Live coding execution feedback turn.
     - Algorithmic complexity follow-up.
-  - [ ] Assert SLA contract: TTFT $p_{50} < 800\text{ ms}$, $p_{95} < 1400\text{ ms}$ (strict upper bound $< 1.5\text{ s}$).
-- [ ] **2.2 End-to-End Evaluation Turnaround Benchmark**
-  - [ ] Measure full evaluation handshake:
+  - [x] Assert SLA contract: TTFT $p_{50} < 800\text{ ms}$, $p_{95} < 1400\text{ ms}$ (strict upper bound $< 1.5\text{ s}$).
+- [x] **2.2 End-to-End Evaluation Turnaround Benchmark**
+  - [x] Measure full evaluation handshake:
     - PII redaction and transcript sanitization.
     - Code snapshot timeline scrubber.
     - Independent Run 1 evaluation ($T \le 0.2$).
     - Independent Run 2 evaluation ($T \le 0.2$).
     - Consistency verification bound check ($|Run1 - Run2| \le 1$).
     - Final consensus scorecard synthesis and serialization.
-  - [ ] Assert SLA contract: complete turnaround time $< 45\text{ s}$ (strict project SLA $< 60\text{ s}$).
-- [ ] **2.3 NPM Benchmark Script**
-  - [ ] Register `pnpm test:sla` in root `package.json` and `packages/core/package.json`.
+  - [x] Assert SLA contract: complete turnaround time $< 45\text{ s}$ (strict project SLA $< 60\text{ s}$).
+- [x] **2.3 NPM Benchmark Script**
+  - [x] Register `pnpm test:sla` in root `package.json` and `packages/core/package.json`.
 
 ---
 

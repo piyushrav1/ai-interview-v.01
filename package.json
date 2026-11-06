@@ -15,6 +15,7 @@
     "test": "vitest run",
     "lint:fix": "eslint --fix src test",
     "test:golden": "pnpm --filter @testmeman/core test:golden",
+    "test:sla": "pnpm --filter @testmeman/core test:sla",
     "db:migrate": "pnpm --filter @testmeman/api db:migrate",
     "format": "prettier --write ."
   },
