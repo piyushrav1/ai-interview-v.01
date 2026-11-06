@@ -1,0 +1,27 @@
+{
+  "slug": "two-sum",
+  "title": "Two Sum",
+  "difficulty": "easy",
+  "statement": "Given an array of integers and a target, return the indices of the two numbers that add up to the target. You may assume each input has exactly one solution, and you may not use the same element twice.",
+  "examples": [
+    {
+      "input": "4\n2 7 11 15\n9",
+      "output": "0 1",
+      "explanation": "The numbers at indices 0 and 1 (2 and 7) add up to 9."
+    }
+  ],
+  "tests": [
+    { "input": "4\n2 7 11 15\n9", "expected": "0 1", "hidden": false },
+    { "input": "3\n3 2 4\n6", "expected": "1 2", "hidden": true },
+    { "input": "2\n3 3\n6", "expected": "0 1", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def main():\n    # Read input: first line is n, second line has n space-separated integers, third line is target\n    data = input().strip().split('\\n')\n    n = int(data[0])\n    nums = list(map(int, data[1].split()))\n    target = int(data[2])\n    # Find two numbers that add up to target\n    pass\n\nmain()",
+    "cpp": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    int n; cin >> n;\n    vector<int> nums(n);\n    for (int& x : nums) cin >> x;\n    int target; cin >> target;\n    // Find two numbers that add up to target\n    return 0;\n}",
+    "c": "#include <stdio.h>\n\nint main() {\n    int n; scanf(\"%d\", &n);\n    int nums[n];\n    for (int i = 0; i < n; i++) scanf(\"%d\", &nums[i]);\n    int target; scanf(\"%d\", &target);\n    // Find two numbers that add up to target\n    return 0;\n}",
+    "java": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        int target = sc.nextInt();\n        // Find two numbers that add up to target\n    }\n}",
+    "javascript": "const readline = require('readline');\nconst rl = readline.createInterface({ input: process.stdin, output: process.stdout });\nlet lines = [];\nrl.on('line', (line) => {\n  lines.push(line);\n  if (lines.length === 3) {\n    const n = parseInt(lines[0]);\n    const nums = lines[1].split(' ').map(Number);\n    const target = parseInt(lines[2]);\n    // Find two numbers that add up to target\n    rl.close();\n  }\n});"
+  },
+  "topics": ["arrays", "hashing", "two-pointers"],
+  "timeLimitMs": 2000
+}

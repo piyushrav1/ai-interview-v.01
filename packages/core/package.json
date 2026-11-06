@@ -1,0 +1,26 @@
+{
+  "name": "@testmeman/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src test",
+    "test": "vitest run",
+    "test:golden": "vitest run test/golden"
+  },
+  "dependencies": {
+    "@testmeman/contracts": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.5"
+  }
+}

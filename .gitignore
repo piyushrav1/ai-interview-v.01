@@ -1,0 +1,27 @@
+# Environment
+.env
+.env.*.local
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+.pnpm-debug.log
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+
+# Wrangler / cloud
+.wrangler/
+
+# Claude local settings
+.claude/settings.local.json

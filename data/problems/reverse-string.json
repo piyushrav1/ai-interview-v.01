@@ -1,0 +1,28 @@
+{
+  "slug": "reverse-string",
+  "title": "Reverse String",
+  "difficulty": "easy",
+  "statement": "Write a function that reverses a string. A string can be reviewed as a character array.",
+  "examples": [
+    {
+      "input": "\"hello\"",
+      "output": "\"olleh\"",
+      "explanation": "The string 'hello' reversed is 'olleh'."
+    }
+  ],
+  "tests": [
+    { "input": "\"hello\"", "output": "\"olleh\"", "hidden": false },
+    { "input": "\"\"", "output": "\"\"", "hidden": true },
+    { "input": "\"a\"", "output": "\"a\"", "hidden": true },
+    { "input": "\"ab\"", "output": "\"ba\"", "hidden": true }
+  ],
+  "starterCode": {
+    "python": "def main():\n    s = input().strip()\n    # Remove quotes if present\n    if s.startswith('\"') and s.endswith('\"'):\n        s = s[1:-1]\n    # Reverse the string\n    pass\n\nmain()",
+    "cpp": "#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    string s; cin >> s;\n    // Reverse the string\n    return 0;\n}",
+    "c": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[1000];\n    fgets(s, sizeof(s), stdin);\n    // Reverse the string\n    return 0;\n}",
+    "java": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // Reverse the string\n    }\n}",
+    "javascript": "const readline = require('readline');\nconst rl = readline.createInterface({ input: process.stdin, output: process.stdout });\nrl.on('line', (line) => {\n  // Remove quotes\n  const s = line.slice(1, -1);\n  // Reverse the string\n  rl.close();\n});"
+  },
+  "topics": ["strings", "two-pointers"],
+  "timeLimitMs": 1000
+}
