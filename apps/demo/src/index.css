@@ -1,7 +1,6 @@
 @import "tailwindcss";
-@source "../../../packages/ui/src/**/*.{ts,tsx}";
-@source "./**/*.{ts,tsx}";
-@source "../index.html";
+@source "./";
+@source "../../../packages/ui/src";
 
 /* Custom scrollbar for chat panel */
 .transcript-scroll::-webkit-scrollbar {
@@ -35,5 +34,3 @@
 .loading-dot:nth-child(1) { animation-delay: 0s; }
 .loading-dot:nth-child(2) { animation-delay: 0.2s; }
 .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
-
