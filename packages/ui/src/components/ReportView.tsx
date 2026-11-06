@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useState, useEffect, type FC } from "react";
 import type { Report, ScoreEvidence } from "@testmeman/contracts";
 
 export interface ReportViewProps {
@@ -27,6 +27,13 @@ function overallColor(score: number): string {
   return "text-red-400";
 }
 
+function formatTimeMs(ms: number): string {
+  const totalSecs = Math.floor(ms / 1000);
+  const mins = Math.floor(totalSecs / 60);
+  const secs = totalSecs % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
 const RubricRow: FC<{ item: ScoreEvidence }> = ({ item }) => {
   const pct = (item.score / 4) * 100;
   return (
@@ -53,6 +60,28 @@ const RubricRow: FC<{ item: ScoreEvidence }> = ({ item }) => {
 };
 
 export const ReportView: FC<ReportViewProps> = ({ report }) => {
+  const [activeSnapIndex, setActiveSnapIndex] = useState(
+    report.codeReplay && report.codeReplay.length > 0 ? report.codeReplay.length - 1 : 0
+  );
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Auto-play timer
+  useEffect(() => {
+    if (!isPlaying || !report.codeReplay || report.codeReplay.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveSnapIndex((prev) => {
+        if (prev >= report.codeReplay.length - 1) {
+          setIsPlaying(false);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [isPlaying, report.codeReplay]);
+
+  const currentSnap = report.codeReplay?.[activeSnapIndex];
+
   return (
     <div className="rounded-xl border border-gray-700 bg-gray-900 p-6 space-y-6">
       {/* Overall Score */}
@@ -111,6 +140,87 @@ export const ReportView: FC<ReportViewProps> = ({ report }) => {
               <li key={i}>{g}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Code Evolution Timeline & Playback Scrubber (Phase 4 & 5) */}
+      {report.codeReplay && report.codeReplay.length > 0 && (
+        <div className="rounded-lg border border-gray-800 bg-gray-950 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h3 className="text-base font-semibold text-gray-200">
+                🎞️ Code Evolution Timeline
+              </h3>
+              <p className="text-xs text-gray-400">
+                Scrub through code revisions across the interview duration
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="rounded bg-blue-600 hover:bg-blue-500 px-2.5 py-1 text-xs font-medium text-white transition"
+              >
+                {isPlaying ? "⏸ Pause" : "▶ Play Replay"}
+              </button>
+              <button
+                type="button"
+                disabled={activeSnapIndex === 0}
+                onClick={() => {
+                  setIsPlaying(false);
+                  setActiveSnapIndex((prev) => Math.max(0, prev - 1));
+                }}
+                className="rounded bg-gray-800 hover:bg-gray-700 px-2 py-1 text-xs text-gray-300 disabled:opacity-40 transition"
+              >
+                ◀
+              </button>
+              <span className="text-xs font-mono text-gray-300 px-1">
+                {activeSnapIndex + 1} / {report.codeReplay.length}
+              </span>
+              <button
+                type="button"
+                disabled={activeSnapIndex === report.codeReplay.length - 1}
+                onClick={() => {
+                  setIsPlaying(false);
+                  setActiveSnapIndex((prev) => Math.min(report.codeReplay.length - 1, prev + 1));
+                }}
+                className="rounded bg-gray-800 hover:bg-gray-700 px-2 py-1 text-xs text-gray-300 disabled:opacity-40 transition"
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+
+          {/* Timeline Slider */}
+          <div className="mb-3">
+            <input
+              type="range"
+              min={0}
+              max={report.codeReplay.length - 1}
+              value={activeSnapIndex}
+              onChange={(e) => {
+                setIsPlaying(false);
+                setActiveSnapIndex(Number(e.target.value));
+              }}
+              className="w-full accent-blue-500 cursor-pointer"
+            />
+            <div className="flex justify-between text-[11px] text-gray-500 mt-1">
+              <span>Start (00:00)</span>
+              <span className="text-blue-400 font-mono font-medium">
+                Timestamp: {formatTimeMs(currentSnap?.timeMs || 0)}
+              </span>
+              <span>
+                Final: {formatTimeMs(report.codeReplay[report.codeReplay.length - 1]?.timeMs || 0)}
+              </span>
+            </div>
+          </div>
+
+          {/* Monospace Code Snapshot Viewer */}
+          <div className="relative rounded-md border border-gray-800 bg-gray-900 overflow-hidden">
+            <pre className="p-3 text-xs font-mono text-gray-200 max-h-60 overflow-y-auto overflow-x-auto whitespace-pre">
+              <code>{currentSnap?.source || "(Empty snapshot)"}</code>
+            </pre>
+          </div>
         </div>
       )}
 

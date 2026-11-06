@@ -377,6 +377,15 @@ export function InterviewRoom() {
     }
   };
 
+  // Periodic auto-save debounced snapshot (Phase 4.1)
+  useEffect(() => {
+    if (!interviewId || phase === "not-started" || phase === "done") return;
+    const t = setTimeout(() => {
+      saveCode();
+    }, 15000);
+    return () => clearTimeout(t);
+  }, [code, interviewId, phase]);
+
   const runCode = async () => {
     if (!interviewId) return;
     setOutput("Running test cases...");
@@ -456,6 +465,9 @@ export function InterviewRoom() {
         );
       }
       setOutput("");
+      if (data.phase) {
+        setPhase(data.phase as Phase);
+      }
       await fetchState(interviewId);
     } catch (e) {
       setOutput(`Error: ${String(e)}`);
