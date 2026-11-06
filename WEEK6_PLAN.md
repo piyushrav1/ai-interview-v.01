@@ -6,7 +6,7 @@
 
 ## Progress Overview
 
-- [ ] **Phase 1: Pilot Evaluation & Human-AI Correlation Engine (`packages/core/src/pilot.ts`)**
+- [x] **Phase 1: Pilot Evaluation & Human-AI Correlation Engine (`packages/core/src/pilot.ts`)**
 - [ ] **Phase 2: SLA Benchmark Suite & Latency Verification (`packages/core/test/benchmark/sla.test.ts`)**
 - [ ] **Phase 3: Durable SQL Database Persistence & Migration Tooling (`apps/api/src/db/`)**
 - [ ] **Phase 4: Standardized Scorecard Export & Shareable Links (`packages/ui` & `apps/api`)**
@@ -59,27 +59,27 @@ flowchart TD
 ## Detailed Checklists
 
 ### Phase 1: Pilot Evaluation & Human-AI Correlation Engine (`packages/core/src/pilot.ts`)
-- [ ] **1.1 Benchmark Data Contracts (`packages/contracts/src/pilot.ts`)**
-  - [ ] Define `HumanEvaluationBenchmarkSchema`:
+- [x] **1.1 Benchmark Data Contracts (`packages/contracts/src/pilot.ts`)**
+  - [x] Define `HumanEvaluationBenchmarkSchema`:
     - `candidateId`, `interviewId`, `problemId`.
     - Dimension ratings (1–4) for: `problemSolving`, `codeCorrectness`, `testingEdgeCases`, `complexityReasoning`, `communication`.
     - `graderId`, `graderExperienceYears`, `verbatimNotes`.
-  - [ ] Define `CorrelationReportSchema`:
+  - [x] Define `CorrelationReportSchema`:
     - Per-dimension metrics: Pearson $r$, Mean Absolute Error (MAE), Root Mean Square Error (RMSE), Quadratic Weighted Cohen's Kappa ($\kappa$).
     - Overall cohort inter-rater agreement index.
     - List of flagged outlier sessions ($|Score_{AI} - Score_{Human}| > 1.0$).
-- [ ] **1.2 Statistical Computation Module (`packages/core/src/pilot.ts`)**
-  - [ ] Implement `calculatePearsonR(x: number[], y: number[]): number`:
+- [x] **1.2 Statistical Computation Module (`packages/core/src/pilot.ts`)**
+  - [x] Implement `calculatePearsonR(x: number[], y: number[]): number`:
     - Computes sample Pearson correlation coefficient with division-by-zero safeguards for constant inputs.
-  - [ ] Implement `calculateMAE(actual: number[], predicted: number[]): number` and `calculateRMSE(...)`.
-  - [ ] Implement `calculateQuadraticWeightedKappa(humanScores: number[], aiScores: number[]): number`:
+  - [x] Implement `calculateMAE(actual: number[], predicted: number[]): number` and `calculateRMSE(...)`.
+  - [x] Implement `calculateQuadraticWeightedKappa(humanScores: number[], aiScores: number[]): number`:
     - Construct $4 \times 4$ observed matrix $O$ and expected matrix $E$.
     - Quadratic weights $w_{ij} = \frac{(i - j)^2}{(k - 1)^2}$.
     - Standardized agreement score with chance correction.
-- [ ] **1.3 Cohort Analysis Runner & Automated Calibration (`packages/core/src/calibration.ts`)**
-  - [ ] Load cohort benchmark pairs from `data/pilot/`.
-  - [ ] Generate comprehensive Markdown and JSON calibration reports (`reports/pilot-calibration-report.md`).
-  - [ ] Target validation thresholds:
+- [x] **1.3 Cohort Analysis Runner & Automated Calibration (`packages/core/src/pilot/comparator.ts`)**
+  - [x] Load cohort benchmark pairs and calculate per-dimension statistics.
+  - [x] Generate comprehensive calibration reports with actionable guidance.
+  - [x] Target validation thresholds:
     - Pearson $r \ge 0.85$ across all dimensions.
     - $\text{MAE} \le 0.40$ on the 1–4 scale.
     - Cohen's $\kappa \ge 0.75$ (substantial agreement).
