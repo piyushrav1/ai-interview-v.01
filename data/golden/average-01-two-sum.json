@@ -1,0 +1,95 @@
+{
+  "id": "average-01-two-sum",
+  "category": "average",
+  "problemSlug": "two-sum",
+  "language": "python",
+  "description": "Brute-force nested loops, needed hints to consider hash map, working code but O(n^2).",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Let's solve Two Sum."
+    },
+    {
+      "role": "candidate",
+      "text": "I can check every pair using two nested for loops."
+    },
+    {
+      "role": "interviewer",
+      "text": "What would the time complexity of two loops be?"
+    },
+    {
+      "role": "candidate",
+      "text": "It will be O(n^2). Is there a faster way?"
+    },
+    {
+      "role": "interviewer",
+      "text": "Think about what data structure allows fast lookup of elements you have already seen."
+    },
+    {
+      "role": "candidate",
+      "text": "Maybe a dictionary? But I'm more confident writing the two loops first to make sure it works."
+    },
+    {
+      "role": "interviewer",
+      "text": "Okay, go ahead and implement it."
+    },
+    {
+      "role": "candidate",
+      "text": "Here is the nested loop code. It passes the sample tests."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 300000,
+      "source": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        n = len(nums)\n        for i in range(n):\n            for j in range(i + 1, n):\n                if nums[i] + nums[j] == target:\n                    return [i, j]\n        return []"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 2,
+      "max": 3
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 2,
+        "max": 3
+      },
+      "codeCorrectness": {
+        "min": 3,
+        "max": 3
+      },
+      "testingEdgeCases": {
+        "min": 2,
+        "max": 3
+      },
+      "complexityReasoning": {
+        "min": 2,
+        "max": 3
+      },
+      "communication": {
+        "min": 3,
+        "max": 3
+      }
+    },
+    "needsHumanReview": false
+  }
+}

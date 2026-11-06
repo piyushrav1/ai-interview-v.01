@@ -1,0 +1,73 @@
+{
+  "id": "off-topic-01-weather-chit-chat",
+  "category": "off-topic",
+  "problemSlug": "two-sum",
+  "language": "python",
+  "description": "Candidate discusses cricket and weather, refuses to focus on coding problem.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Let's solve Two Sum today."
+    },
+    {
+      "role": "candidate",
+      "text": "Did you watch the cricket match yesterday? India played amazing!"
+    },
+    {
+      "role": "interviewer",
+      "text": "We need to focus on the technical assessment. Can you look at Two Sum?"
+    },
+    {
+      "role": "candidate",
+      "text": "Yeah yeah, but Virat Kohli's cover drive is legendary. What team do you support?"
+    },
+    {
+      "role": "interviewer",
+      "text": "Please write the approach for Two Sum."
+    },
+    {
+      "role": "candidate",
+      "text": "Also the weather here is raining so much today."
+    }
+  ],
+  "codeSnapshots": [],
+  "testResults": [
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 1
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 1
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 1
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 1
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 1
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

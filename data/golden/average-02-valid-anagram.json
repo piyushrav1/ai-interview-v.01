@@ -1,0 +1,83 @@
+{
+  "id": "average-02-valid-anagram",
+  "category": "average",
+  "problemSlug": "valid-anagram",
+  "language": "java",
+  "description": "Solves anagram by sorting character arrays in O(n log n) instead of O(n) counting array.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Let's solve Valid Anagram."
+    },
+    {
+      "role": "candidate",
+      "text": "To check if two strings are anagrams, if we sort both strings and they are equal, then they are anagrams."
+    },
+    {
+      "role": "interviewer",
+      "text": "Can you do it without sorting in O(n) time?"
+    },
+    {
+      "role": "candidate",
+      "text": "Sorting is very easy in Java with Arrays.sort. I'll convert both to char arrays, sort them, and compare."
+    },
+    {
+      "role": "interviewer",
+      "text": "What is the time complexity of your approach?"
+    },
+    {
+      "role": "candidate",
+      "text": "Sorting is O(n log n). So it is O(n log n) time and O(n) space for the char arrays."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 200000,
+      "source": "import java.util.Arrays;\n\nclass Solution {\n    public boolean isAnagram(String s, String t) {\n        if (s.length() != t.length()) return false;\n        char[] sArr = s.toCharArray();\n        char[] tArr = t.toCharArray();\n        Arrays.sort(sArr);\n        Arrays.sort(tArr);\n        return Arrays.equals(sArr, tArr);\n    }\n}"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 3,
+      "max": 3
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 3,
+        "max": 3
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 3,
+        "max": 3
+      },
+      "complexityReasoning": {
+        "min": 3,
+        "max": 3
+      },
+      "communication": {
+        "min": 3,
+        "max": 3
+      }
+    },
+    "needsHumanReview": false
+  }
+}

@@ -4,6 +4,48 @@ import { GoogleGenAI } from "@google/genai";
 import type { ZodType } from "zod";
 
 /**
+ * Helper to retry transient Gemini errors (503 Service Unavailable, 429 Rate Limits, Network glitches)
+ * with exponential backoff and jitter.
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  options: { maxRetries?: number; initialDelayMs?: number; maxDelayMs?: number; operationName?: string } = {}
+): Promise<T> {
+  const maxRetries = options.maxRetries ?? 3;
+  let delay = options.initialDelayMs ?? 600;
+  const maxDelay = options.maxDelayMs ?? 4000;
+  const op = options.operationName ?? "Gemini API";
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err: unknown) {
+      const errStr = String(err);
+      const isTransient =
+        errStr.includes("503") ||
+        errStr.includes("429") ||
+        errStr.includes("UNAVAILABLE") ||
+        errStr.includes("RESOURCE_EXHAUSTED") ||
+        errStr.includes("high demand") ||
+        errStr.includes("overloaded") ||
+        errStr.includes("fetch failed") ||
+        errStr.includes("network");
+
+      if (!isTransient || attempt === maxRetries) {
+        throw err;
+      }
+
+      const jitter = delay * (0.8 + Math.random() * 0.4);
+      console.warn(`[${op}] Transient error (attempt ${attempt}/${maxRetries}): ${errStr.slice(0, 150)}. Retrying in ${Math.round(jitter)}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, jitter));
+      delay = Math.min(delay * 2, maxDelay);
+    }
+  }
+
+  throw new Error(`${op} failed after ${maxRetries} attempts`);
+}
+
+/**
  * Real Gemini adapter using @google/genai.
  *
  * `chat()` uses `generateContentStream` for word-by-word streaming.
@@ -30,13 +72,17 @@ export class GeminiModel implements AIModel {
       parts: [{ text: m.text }],
     }));
 
-    const response = await this.client.models.generateContentStream({
-      model: this.modelName,
-      contents,
-      config: {
-        systemInstruction: input.system,
-      },
-    });
+    const response = await withRetry(
+      () =>
+        this.client.models.generateContentStream({
+          model: this.modelName,
+          contents,
+          config: {
+            systemInstruction: input.system,
+          },
+        }),
+      { operationName: "GeminiModel.chat" }
+    );
 
     for await (const chunk of response) {
       if (input.signal?.aborted) break;
@@ -67,11 +113,15 @@ export class GeminiModel implements AIModel {
       config.temperature = params.temperature;
     }
 
-    const response = await this.client.models.generateContent({
-      model: this.modelName,
-      contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
-      config,
-    });
+    const response = await withRetry(
+      () =>
+        this.client.models.generateContent({
+          model: this.modelName,
+          contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+          config,
+        }),
+      { operationName: "GeminiModel.structured" }
+    );
 
     const text = response.text;
     if (!text) {
@@ -119,6 +169,8 @@ function schemaToJsonDescription(schema: ZodType<unknown>): Record<string, unkno
       return { type: "string", enum: Object.values(def.values ?? {}) };
     case "ZodEnum":
       return { type: "string", enum: (def as unknown as { values: string[] }).values };
+    case "ZodOptional":
+    case "ZodNullable":
     case "ZodDefault":
       return schemaToJsonDescription(def.innerType as ZodType<unknown>);
     default:

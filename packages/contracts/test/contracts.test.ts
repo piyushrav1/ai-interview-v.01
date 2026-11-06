@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { LanguageEnum, PhaseEnum, TurnRoleEnum, RubricDimensionEnum } from "../src/common.ts";
+import { LanguageEnum, PhaseEnum } from "../src/common.ts";
 import { ProblemSchema } from "../src/problems.ts";
 
 describe("common types", () => {

@@ -94,6 +94,7 @@ export default {
     app.get("/problems", (c) => c.json(listProblems()));
     app.get("/problems/:slug", (c) => c.json(getProblem(c.req.param("slug"))));
     app.get("/health", (c) => c.json({ ok: true }));
+    app.get("/favicon.ico", (c) => c.body(null, 204));
 
     return app.fetch(request, env, ctx) as unknown as Response;
   },

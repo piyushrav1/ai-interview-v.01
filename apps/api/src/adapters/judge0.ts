@@ -182,8 +182,8 @@ export class Judge0Runner implements CodeRunner {
           passed = true;
         } else {
           // Normalize formatting differences (brackets, spaces)
-          const normActual = cleanActual.replace(/\s+/g, "").replace(/^[\[\(]/, "").replace(/[\]\)]$/, "");
-          const normExpected = cleanExpected.replace(/\s+/g, "").replace(/^[\[\(]/, "").replace(/[\]\)]$/, "");
+          const normActual = cleanActual.replace(/\s+/g, "").replace(/^[[()]/, "").replace(/[\])]$/, "");
+          const normExpected = cleanExpected.replace(/\s+/g, "").replace(/^[[()]/, "").replace(/[\])]$/, "");
           if (normActual === normExpected && normActual.length > 0) {
             passed = true;
           }

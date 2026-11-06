@@ -1,0 +1,83 @@
+{
+  "id": "weak-02-contains-duplicate",
+  "category": "weak",
+  "problemSlug": "contains-duplicate",
+  "language": "cpp",
+  "description": "Syntax errors, undefined variables, confused indexing, unable to compile.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Let's check if an array contains duplicates."
+    },
+    {
+      "role": "candidate",
+      "text": "I think we can loop over the array and if nums[i] == nums[j] return true."
+    },
+    {
+      "role": "interviewer",
+      "text": "What are the bounds for i and j?"
+    },
+    {
+      "role": "candidate",
+      "text": "i = 0 to n and j = 0 to n."
+    },
+    {
+      "role": "interviewer",
+      "text": "If i equals j, wouldn't nums[i] always equal nums[j]?"
+    },
+    {
+      "role": "candidate",
+      "text": "I will write the code and see."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 400000,
+      "source": "class Solution {\npublic:\n    bool containsDuplicate(vector<int>& nums) {\n        for (int i = 0; i <= nums.size(); i++) {\n            if (nums[i] == nums[j]) { // error: j not declared\n                return true\n            }\n        }\n        return false;\n    }\n};"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 1
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 2
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 1
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 1
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 1
+      },
+      "communication": {
+        "min": 1,
+        "max": 2
+      }
+    },
+    "needsHumanReview": false
+  }
+}

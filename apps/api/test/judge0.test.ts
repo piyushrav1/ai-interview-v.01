@@ -22,7 +22,7 @@ describe("Judge0 Base64 Helpers", () => {
   });
 
   it("encodes and decodes unicode and multiline strings", () => {
-    const input = "def solve():\n    return '🚀 success'\n";
+    const input = "def solve():\n    return 'utf8 accents: é, è, à, 中文, π'\n";
     const encoded = toBase64(input);
     expect(fromBase64(encoded)).toBe(input);
   });

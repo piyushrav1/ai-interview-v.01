@@ -1,0 +1,87 @@
+{
+  "id": "average-03-reverse-string",
+  "category": "average",
+  "problemSlug": "reverse-string",
+  "language": "c",
+  "description": "Working in-place two pointer swap in C, but confused on pointer arithmetic vs array indexing.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Please reverse an array of characters in-place."
+    },
+    {
+      "role": "candidate",
+      "text": "I will use two pointers, start at 0 and end at length - 1, and swap until they meet."
+    },
+    {
+      "role": "interviewer",
+      "text": "How do you do the swap in C?"
+    },
+    {
+      "role": "candidate",
+      "text": "Using a temp char variable: char tmp = s[i]; s[i] = s[j]; s[j] = tmp;"
+    },
+    {
+      "role": "interviewer",
+      "text": "What is the space complexity?"
+    },
+    {
+      "role": "candidate",
+      "text": "Maybe O(n) because of the string size? Or O(1)?"
+    },
+    {
+      "role": "interviewer",
+      "text": "Auxiliary space is only the extra memory allocated."
+    },
+    {
+      "role": "candidate",
+      "text": "Oh right, then O(1) auxiliary space."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 150000,
+      "source": "void reverseString(char* s, int sSize) {\n    int left = 0;\n    int right = sSize - 1;\n    while (left < right) {\n        char temp = s[left];\n        s[left] = s[right];\n        s[right] = temp;\n        left++;\n        right--;\n    }\n}"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 3,
+      "max": 3
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 3,
+        "max": 3
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 3,
+        "max": 3
+      },
+      "complexityReasoning": {
+        "min": 2,
+        "max": 3
+      },
+      "communication": {
+        "min": 3,
+        "max": 3
+      }
+    },
+    "needsHumanReview": false
+  }
+}

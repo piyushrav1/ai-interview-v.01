@@ -1,0 +1,95 @@
+{
+  "id": "weak-01-coin-change",
+  "category": "weak",
+  "problemSlug": "coin-change",
+  "language": "python",
+  "description": "Uses greedy approach which fails on Coin Change, unable to grasp dynamic programming.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Let's solve Coin Change."
+    },
+    {
+      "role": "candidate",
+      "text": "I will sort the coins descending and take the largest coin as much as possible."
+    },
+    {
+      "role": "interviewer",
+      "text": "Does greedy work for coins [1, 3, 4] with target 6?"
+    },
+    {
+      "role": "candidate",
+      "text": "Yes, take 4, then we need 2, so take 1 and 1. That's 3 coins."
+    },
+    {
+      "role": "interviewer",
+      "text": "Can you do it in fewer coins? What about two 3-cent coins?"
+    },
+    {
+      "role": "candidate",
+      "text": "Oh... 3 + 3 is 6, which is 2 coins. But I don't know how to code that. I only know how to do a while loop with largest coins."
+    },
+    {
+      "role": "interviewer",
+      "text": "Have you worked with dynamic programming or BFS?"
+    },
+    {
+      "role": "candidate",
+      "text": "No, I find dynamic programming too hard. I'll just write the greedy code."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 360000,
+      "source": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        coins.sort(reverse=True)\n        count = 0\n        for c in coins:\n            while amount >= c:\n                amount -= c\n                count += 1\n        return count if amount == 0 else -1"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 2
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 2
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 2
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 2
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 2
+      },
+      "communication": {
+        "min": 2,
+        "max": 3
+      }
+    },
+    "needsHumanReview": false
+  }
+}

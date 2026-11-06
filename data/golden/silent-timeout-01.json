@@ -1,0 +1,61 @@
+{
+  "id": "silent-timeout-01",
+  "category": "silent",
+  "problemSlug": "contains-duplicate",
+  "language": "python",
+  "description": "Candidate joins intro turn and goes completely silent without coding.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome to your interview! Are you ready?"
+    },
+    {
+      "role": "candidate",
+      "text": "Yes, I am ready."
+    },
+    {
+      "role": "interviewer",
+      "text": "Here is your problem: Contains Duplicate. How would you solve it?"
+    }
+  ],
+  "codeSnapshots": [],
+  "testResults": [
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 1
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 1
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 1
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 1
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 1
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

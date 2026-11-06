@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@source "./**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+@source "../../../apps/demo/src/**/*.{ts,tsx}";
+@source "../../../apps/demo/index.html";
 
 /* Custom scrollbar for chat panel */
 .transcript-scroll::-webkit-scrollbar {

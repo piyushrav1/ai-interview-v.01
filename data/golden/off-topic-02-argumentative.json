@@ -1,0 +1,73 @@
+{
+  "id": "off-topic-02-argumentative",
+  "category": "off-topic",
+  "problemSlug": "coin-change",
+  "language": "javascript",
+  "description": "Candidate argues aggressively that DSA is irrelevant in modern development, writes no code.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome to your interview. Let's look at Coin Change."
+    },
+    {
+      "role": "candidate",
+      "text": "Why do companies still ask these useless LeetCode questions? Nobody uses Coin Change in React or Node."
+    },
+    {
+      "role": "interviewer",
+      "text": "This evaluates problem decomposition and algorithm fundamentals. Can we proceed?"
+    },
+    {
+      "role": "candidate",
+      "text": "No, this is completely stupid. I build real full-stack web apps with Next.js. I'm not going to write dynamic programming."
+    },
+    {
+      "role": "interviewer",
+      "text": "If you don't want to solve the problem, we will have to conclude the interview."
+    },
+    {
+      "role": "candidate",
+      "text": "Go ahead and end it then."
+    }
+  ],
+  "codeSnapshots": [],
+  "testResults": [
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 1
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 1
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 1
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 1
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 1
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

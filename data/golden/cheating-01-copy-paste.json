@@ -1,0 +1,95 @@
+{
+  "id": "cheating-01-copy-paste",
+  "category": "cheating",
+  "problemSlug": "trapping-rain-water",
+  "language": "cpp",
+  "description": "Silent for 10 minutes, suddenly pastes complex monotonic stack code, cannot explain any line.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Can you explain how you plan to approach Trapping Rain Water?"
+    },
+    {
+      "role": "candidate",
+      "text": "..."
+    },
+    {
+      "role": "interviewer",
+      "text": "Are you there?"
+    },
+    {
+      "role": "candidate",
+      "text": "Wait 2 minutes."
+    },
+    {
+      "role": "interviewer",
+      "text": "I see you just pasted 40 lines of code with stack operations. Can you walk me through line 12?"
+    },
+    {
+      "role": "candidate",
+      "text": "It's just standard monotonic stack algorithm. Everyone uses this."
+    },
+    {
+      "role": "interviewer",
+      "text": "Why do we calculate bounded_height = min(height[current], height[st.top()]) - height[top]?"
+    },
+    {
+      "role": "candidate",
+      "text": "It calculates the water. That's the formula."
+    },
+    {
+      "role": "interviewer",
+      "text": "Can you explain why we subtract height[top]?"
+    },
+    {
+      "role": "candidate",
+      "text": "I don't know, that's what the solution says."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 1,
+      "timeMs": 600000,
+      "source": "#include <vector>\n#include <stack>\nusing namespace std;\n\nclass Solution {\npublic:\n    int trap(vector<int>& height) {\n        int ans = 0, current = 0;\n        stack<int> st;\n        while (current < height.size()) {\n            while (!st.empty() && height[current] > height[st.top()]) {\n                int top = st.top();\n                st.pop();\n                if (st.empty()) break;\n                int distance = current - st.top() - 1;\n                int bounded_height = min(height[current], height[st.top()]) - height[top];\n                ans += distance * bounded_height;\n            }\n            st.push(current++);\n        }\n        return ans;\n    }\n};"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 2
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 2
+      },
+      "codeCorrectness": {
+        "min": 3,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 2
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 2
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

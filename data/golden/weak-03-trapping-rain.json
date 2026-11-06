@@ -1,0 +1,79 @@
+{
+  "id": "weak-03-trapping-rain",
+  "category": "weak",
+  "problemSlug": "trapping-rain-water",
+  "language": "python",
+  "description": "Candidate submits blank code, cannot understand or break down problem.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome. Today we have Trapping Rain Water."
+    },
+    {
+      "role": "candidate",
+      "text": "Water is trapped between bars. How do we measure water?"
+    },
+    {
+      "role": "interviewer",
+      "text": "For each position, the water level is bounded by the minimum of the highest bar to the left and highest to the right."
+    },
+    {
+      "role": "candidate",
+      "text": "I don't understand how to code that."
+    },
+    {
+      "role": "interviewer",
+      "text": "Can you think of finding the max bar to the left for each index?"
+    },
+    {
+      "role": "candidate",
+      "text": "Sorry, I have not practiced hard problems. I cannot write code for this."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 1,
+      "timeMs": 100000,
+      "source": "class Solution:\n    def trap(self, height: list[int]) -> int:\n        pass"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 1
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 1
+      },
+      "codeCorrectness": {
+        "min": 1,
+        "max": 1
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 1
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 1
+      },
+      "communication": {
+        "min": 1,
+        "max": 2
+      }
+    },
+    "needsHumanReview": false
+  }
+}

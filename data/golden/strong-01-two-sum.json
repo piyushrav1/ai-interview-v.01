@@ -1,0 +1,99 @@
+{
+  "id": "strong-01-two-sum",
+  "category": "strong",
+  "problemSlug": "two-sum",
+  "language": "python",
+  "description": "Optimal hash table solution with proactive edge case analysis and clear Big-O reasoning.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Today we will solve the Two Sum problem."
+    },
+    {
+      "role": "candidate",
+      "text": "Thank you! Before coding, let me clarify: can there be negative numbers? Can the same element be used twice? And is there always exactly one valid pair?"
+    },
+    {
+      "role": "interviewer",
+      "text": "Yes, numbers can be negative. You cannot use the same element twice. There is guaranteed to be one unique answer."
+    },
+    {
+      "role": "candidate",
+      "text": "Great. A brute force approach checks all pairs in O(n^2) time and O(1) space. We can optimize this using a hash map to achieve O(n) time and O(n) space. As we iterate through the list, for each number x, we look up target - x in the map. If present, we return [map[target - x], current_index]. Otherwise, we store x and its index."
+    },
+    {
+      "role": "interviewer",
+      "text": "Sounds optimal! Go ahead and write the solution."
+    },
+    {
+      "role": "candidate",
+      "text": "I have written the solution. I also accounted for duplicate values by checking complement before inserting."
+    },
+    {
+      "role": "interviewer",
+      "text": "What are the time and space complexities?"
+    },
+    {
+      "role": "candidate",
+      "text": "Time complexity is O(n) on average because dictionary lookup and insertion are O(1) average time. Space complexity is O(n) in the worst case where we store up to n elements in the dictionary."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 120000,
+      "source": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        seen = {}\n        for i, num in enumerate(nums):\n            complement = target - num\n            if complement in seen:\n                return [seen[complement], i]\n            seen[num] = i\n        return []"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 4,
+      "max": 4
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 4,
+        "max": 4
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 3,
+        "max": 4
+      },
+      "complexityReasoning": {
+        "min": 4,
+        "max": 4
+      },
+      "communication": {
+        "min": 4,
+        "max": 4
+      }
+    },
+    "needsHumanReview": false
+  }
+}

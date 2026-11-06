@@ -1,0 +1,79 @@
+{
+  "id": "good-code-poor-comm-01",
+  "category": "silent",
+  "problemSlug": "two-sum",
+  "language": "python",
+  "description": "Optimal working code, passes 100% tests, but completely silent and refuses to talk.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Before coding, can you walk me through your planned approach?"
+    },
+    {
+      "role": "candidate",
+      "text": "..."
+    },
+    {
+      "role": "interviewer",
+      "text": "Can you hear me? Please explain your approach before writing code."
+    },
+    {
+      "role": "candidate",
+      "text": ""
+    },
+    {
+      "role": "interviewer",
+      "text": "I see you submitted optimal code. Can you explain why you chose a dictionary?"
+    },
+    {
+      "role": "candidate",
+      "text": "No."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 1,
+      "timeMs": 180000,
+      "source": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        lookup = {}\n        for i, val in enumerate(nums):\n            diff = target - val\n            if diff in lookup:\n                return [lookup[diff], i]\n            lookup[val] = i\n        return []"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 2,
+      "max": 3
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 3,
+        "max": 4
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 2,
+        "max": 3
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 2
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "id": "edge-blind-01-two-sum",
+  "category": "edge-blind",
+  "problemSlug": "two-sum",
+  "language": "javascript",
+  "description": "Uses indexOf which pairs an element with itself on duplicates like [3, 3] target 6.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Let's solve Two Sum in JavaScript."
+    },
+    {
+      "role": "candidate",
+      "text": "Very simple, for each element x, I check nums.indexOf(target - x)."
+    },
+    {
+      "role": "interviewer",
+      "text": "What happens if nums = [3, 3] and target = 6? Will indexOf return index 0 for both?"
+    },
+    {
+      "role": "candidate",
+      "text": "No, my code works on all standard test cases."
+    },
+    {
+      "role": "interviewer",
+      "text": "Have you tested with duplicate elements?"
+    },
+    {
+      "role": "candidate",
+      "text": "It passed sample test 1, so there are no bugs."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 180000,
+      "source": "class Solution {\n  twoSum(nums, target) {\n    for (let i = 0; i < nums.length; i++) {\n      let complement = target - nums[i];\n      let j = nums.indexOf(complement);\n      if (j !== -1 && j !== i) { // Fixed self check but fails [3, 3] if duplicate isn't found\n        return [i, j];\n      }\n    }\n    return [];\n  }\n}"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 2,
+      "max": 2
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 2,
+        "max": 2
+      },
+      "codeCorrectness": {
+        "min": 2,
+        "max": 2
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 2
+      },
+      "complexityReasoning": {
+        "min": 2,
+        "max": 2
+      },
+      "communication": {
+        "min": 2,
+        "max": 3
+      }
+    },
+    "needsHumanReview": false
+  }
+}

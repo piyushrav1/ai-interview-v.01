@@ -4,7 +4,7 @@ import { TurnRoleEnum } from "@testmeman/contracts";
 export function buildWrapUpPrompt(params: { startTime: number }): { system: string; messages: { role: "interviewer" | "candidate"; text: string; turnAt?: number }[] } {
   const system = `You are wrapping up an interview. Thank the candidate and explain what happens next.` as const;
 
-  const message = `Thanks for your time today! 👋
+  const message = `Thanks for your time today!
 
 That's the end of our interview. Here's what happens next:
 1. The evaluator will score your performance

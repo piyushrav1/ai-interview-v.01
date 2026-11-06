@@ -26,13 +26,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm exec eslint . --ext .ts,.tsx
+        run: pnpm -r lint
 
       - name: Typecheck
         run: pnpm -r typecheck
 
       - name: Test
-        run: node node_modules/vitest/dist/cli.js run
+        run: pnpm test
+
+      - name: Golden Set Benchmark (Week 5 CI)
+        run: pnpm test:golden
 
       - name: Build
         run: pnpm -r build

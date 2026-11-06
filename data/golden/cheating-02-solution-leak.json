@@ -1,0 +1,79 @@
+{
+  "id": "cheating-02-solution-leak",
+  "category": "cheating",
+  "problemSlug": "two-sum",
+  "language": "python",
+  "description": "Recited exact editorial text verbatim, completely collapses when asked to return 1-based indices.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "How would you solve Two Sum?"
+    },
+    {
+      "role": "candidate",
+      "text": "While iterating and inserting elements into the hash table, we also look back to check if current element's complement already exists in the table. If it exists, we have found a solution and return the indices immediately."
+    },
+    {
+      "role": "interviewer",
+      "text": "That sounds verbatim like the official editorial. What if the problem required 1-based indices instead of 0-based?"
+    },
+    {
+      "role": "candidate",
+      "text": "That violates the problem statement. The problem says 0-based."
+    },
+    {
+      "role": "interviewer",
+      "text": "I am changing the problem constraint for a follow-up: return 1-based indices."
+    },
+    {
+      "role": "candidate",
+      "text": "You cannot change the question. I only memorized the standard answer."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 120000,
+      "source": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        hashmap = {}\n        for i in range(len(nums)):\n            complement = target - nums[i]\n            if complement in hashmap:\n                return [i, hashmap[complement]]\n            hashmap[nums[i]] = i"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 1,
+      "max": 2
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 1,
+        "max": 2
+      },
+      "codeCorrectness": {
+        "min": 3,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 2
+      },
+      "complexityReasoning": {
+        "min": 1,
+        "max": 2
+      },
+      "communication": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "needsHumanReview": false
+  }
+}

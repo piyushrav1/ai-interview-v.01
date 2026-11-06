@@ -1,0 +1,83 @@
+{
+  "id": "edge-blind-02-longest-substr",
+  "category": "edge-blind",
+  "problemSlug": "longest-substring-without-repeating-characters",
+  "language": "python",
+  "description": "Sliding window that fails on single-character and repeating-character inputs.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Let's find the longest substring without repeating characters."
+    },
+    {
+      "role": "candidate",
+      "text": "I will use a set and two pointers. As right advances, if char in set, remove from left."
+    },
+    {
+      "role": "interviewer",
+      "text": "What if the input string is empty or has length 1?"
+    },
+    {
+      "role": "candidate",
+      "text": "The code will just return 0 for both because the loop won't do much."
+    },
+    {
+      "role": "interviewer",
+      "text": "For string 'a', the answer should be 1, not 0."
+    },
+    {
+      "role": "candidate",
+      "text": "I don't think single characters matter much in practice."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 250000,
+      "source": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        if len(s) <= 1:\n            return 0 # bug: single char should be 1\n        char_set = set()\n        left = 0\n        max_len = 0\n        for right in range(len(s)):\n            while s[right] in char_set:\n                char_set.remove(s[left])\n                left += 1\n            char_set.add(s[right])\n            max_len = max(max_len, right - left + 1)\n        return max_len"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": false
+    },
+    {
+      "passed": false,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 2,
+      "max": 3
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 2,
+        "max": 3
+      },
+      "codeCorrectness": {
+        "min": 2,
+        "max": 3
+      },
+      "testingEdgeCases": {
+        "min": 1,
+        "max": 2
+      },
+      "complexityReasoning": {
+        "min": 2,
+        "max": 3
+      },
+      "communication": {
+        "min": 2,
+        "max": 2
+      }
+    },
+    "needsHumanReview": false
+  }
+}

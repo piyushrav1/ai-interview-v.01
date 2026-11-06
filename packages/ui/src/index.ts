@@ -7,3 +7,8 @@ export { ReportView } from "./components/ReportView.js";
 export type { ReportViewProps } from "./components/ReportView.js";
 export { MarkdownMessage } from "./components/MarkdownMessage.js";
 export type { MarkdownMessageProps } from "./components/MarkdownMessage.js";
+export { InteractiveMCQ } from "./components/InteractiveMCQ.js";
+export type { MCQData } from "./components/InteractiveMCQ.js";
+export { QuickActionBar } from "./components/QuickActionBar.js";
+export { EvaluatingView } from "./components/EvaluatingView.js";
+export * from "lucide-react";

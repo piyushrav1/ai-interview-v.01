@@ -1,9 +1,29 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { Phase, Language, Report } from "@testmeman/contracts";
+import {
+  ClipboardList,
+  UserCheck,
+  FileCode2,
+  Terminal,
+  HelpCircle,
+  Layers,
+  Flag,
+  Activity,
+  CheckCircle2,
+  User,
+  Bot,
+  Play,
+  Send,
+  Check,
+  XCircle,
+  FileBarChart,
+} from "lucide-react";
 import { CodeEditor } from "./components/CodeEditor.js";
 import { Timer } from "./components/Timer.js";
 import { ReportView } from "./components/ReportView.js";
 import { MarkdownMessage } from "./components/MarkdownMessage.js";
+import { QuickActionBar } from "./components/QuickActionBar.js";
+import { EvaluatingView } from "./components/EvaluatingView.js";
 
 interface TranscriptEntry {
   id: number;
@@ -11,16 +31,19 @@ interface TranscriptEntry {
   text: string;
 }
 
-const PHASE_LABELS: Record<Phase, string> = {
-  plan: "📋 Planning",
-  intro: "👋 Introduction",
-  problem: "🧩 Problem Statement",
-  coding: "💻 Coding",
-  followUps: "❓ Follow-up Questions",
-  concepts: "📚 Concept Questions",
-  wrapUp: "🎁 Wrap Up",
-  evaluate: "📊 Evaluating",
-  done: "✅ Done",
+const PHASE_CONFIG: Record<
+  Phase,
+  { label: string; icon: React.ComponentType<{ className?: string }> }
+> = {
+  plan: { label: "Plan", icon: ClipboardList },
+  intro: { label: "Intro", icon: UserCheck },
+  problem: { label: "Problem", icon: FileCode2 },
+  coding: { label: "Coding", icon: Terminal },
+  followUps: { label: "Follow-ups", icon: HelpCircle },
+  concepts: { label: "Concepts", icon: Layers },
+  wrapUp: { label: "Wrap-up", icon: Flag },
+  evaluate: { label: "Evaluate", icon: Activity },
+  done: { label: "Done", icon: CheckCircle2 },
 };
 
 const PHASE_ORDER: Phase[] = [
@@ -53,6 +76,7 @@ function PhaseIndicator({ phase }: { phase: Phase }) {
       {PHASE_ORDER.map((p, idx) => {
         const isCurrent = p === phase;
         const isPast = idx < currentIdx;
+        const Icon = PHASE_CONFIG[p].icon;
         return (
           <div key={p} className="flex items-center gap-1">
             {idx > 0 && (
@@ -63,7 +87,7 @@ function PhaseIndicator({ phase }: { phase: Phase }) {
               />
             )}
             <span
-              className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+              className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
                 isCurrent
                   ? "bg-blue-600 text-white"
                   : isPast
@@ -71,7 +95,8 @@ function PhaseIndicator({ phase }: { phase: Phase }) {
                     : "bg-gray-800 text-gray-500"
               }`}
             >
-              {PHASE_LABELS[p]}
+              <Icon className="h-3 w-3 shrink-0" />
+              {PHASE_CONFIG[p].label}
             </span>
           </div>
         );
@@ -242,11 +267,10 @@ export function InterviewRoom() {
     }
   };
 
-  const sendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!interviewId || !message.trim() || streaming) return;
+  const sendTextMessage = async (rawText: string) => {
+    if (!interviewId || !rawText.trim() || streaming) return;
 
-    const userText = message;
+    const userText = rawText.trim();
     setMessage("");
     setTranscript((prev) => [
       ...prev,
@@ -359,9 +383,22 @@ export function InterviewRoom() {
       console.error("Send failed:", e);
       setStreaming(false);
       setStreamText("");
+      setTranscript((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          role: "interviewer",
+          text: "I encountered a temporary connection issue. Please resend your message or try again in a moment.",
+        },
+      ]);
     }
 
     inputRef.current?.focus();
+  };
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await sendTextMessage(message);
   };
 
   const saveCode = async () => {
@@ -474,25 +511,55 @@ export function InterviewRoom() {
     }
   };
 
-  const endInterview = async () => {
-    if (!interviewId) return;
+  const isEndingRef = useRef(false);
+
+  const endInterview = useCallback(async () => {
+    if (!interviewId || isEndingRef.current) return;
+    isEndingRef.current = true;
     setLoading(true);
+    setPhase("evaluate");
     try {
-      await fetch(`/interviews/${interviewId}/end`, { method: "POST" });
-      const res = await fetch(`/interviews/${interviewId}/report`);
-      const data: Report = await res.json();
-      setReport(data);
-      setPhase("done");
+      const res = await fetch(`/interviews/${interviewId}/end`, { method: "POST" });
+      const data = await res.json();
+      if (data && data.report) {
+        setReport(data.report);
+        setPhase("done");
+      } else {
+        const reportRes = await fetch(`/interviews/${interviewId}/report`);
+        const reportData: Report = await reportRes.json();
+        setReport(reportData);
+        setPhase("done");
+      }
     } catch (e) {
       console.error("End interview failed:", e);
+      try {
+        const reportRes = await fetch(`/interviews/${interviewId}/report`);
+        const reportData: Report = await reportRes.json();
+        if (reportData && reportData.overallScore) {
+          setReport(reportData);
+          setPhase("done");
+          return;
+        }
+      } catch {
+        // ignore
+      }
+      setPhase("wrapUp");
     } finally {
       setLoading(false);
+      isEndingRef.current = false;
     }
-  };
+  }, [interviewId]);
+
+  // When phase becomes 'evaluate' or 'done' but report is missing, immediately trigger endInterview
+  useEffect(() => {
+    if ((phase === "evaluate" || phase === "done") && !report && interviewId && !isEndingRef.current) {
+      void endInterview();
+    }
+  }, [phase, report, interviewId, endInterview]);
 
   const handleTimeUp = useCallback(() => {
     void endInterview();
-  }, [interviewId]);
+  }, [endInterview]);
 
   const deleteInterviewData = async () => {
     if (!interviewId) return;
@@ -650,6 +717,11 @@ export function InterviewRoom() {
     );
   }
 
+  // ── Evaluating view ───────────────────────────────────────────
+  if (phase === "evaluate") {
+    return <EvaluatingView />;
+  }
+
   // ── Main interview view ───────────────────────────────────────
   return (
     <div className="flex h-screen flex-col bg-gray-950 text-gray-100">
@@ -701,19 +773,26 @@ export function InterviewRoom() {
                 className={`flex ${t.role === "candidate" ? "justify-end" : "justify-start"}`}
               >
                 {t.role === "candidate" ? (
-                  <div className="max-w-[85%] rounded-2xl bg-blue-600 px-4 py-2.5 text-sm leading-relaxed text-white whitespace-pre-wrap shadow-sm">
+                  <div className="max-w-[85%] rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-sm leading-relaxed text-white whitespace-pre-wrap shadow-md border border-blue-400/20">
+                    <div className="text-[10px] text-blue-200/90 mb-1 font-medium flex items-center gap-1.5">
+                      <User className="h-3 w-3" />
+                      <span>You (Candidate)</span>
+                    </div>
                     {t.text}
                   </div>
                 ) : (
                   <div className="max-w-[92%] rounded-2xl bg-gray-800/95 border border-gray-700/60 p-4 text-sm leading-relaxed text-gray-200 shadow-md">
                     <div className="mb-2 flex items-center justify-between border-b border-gray-700/50 pb-1.5 text-xs">
                       <span className="font-semibold text-blue-400 flex items-center gap-1.5">
-                        <span>🤖</span> AI Technical Interviewer
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                        <Bot className="h-3.5 w-3.5" />
+                        <span>AI Technical Interviewer</span>
                       </span>
                     </div>
                     <MarkdownMessage
                       content={t.text}
                       onLoadCode={(starterCode) => setCode(starterCode)}
+                      onSelectMCQOption={(opt) => void sendTextMessage(opt)}
                     />
                   </div>
                 )}
@@ -725,12 +804,16 @@ export function InterviewRoom() {
               <div className="flex justify-start">
                 <div className="max-w-[92%] rounded-2xl bg-gray-800/95 border border-gray-700/60 p-4 text-sm leading-relaxed text-gray-200 shadow-md">
                   <div className="mb-2 flex items-center gap-1.5 border-b border-gray-700/50 pb-1.5 text-xs font-semibold text-blue-400">
-                    <span>🤖</span> AI Technical Interviewer <span className="text-gray-500 font-normal">(streaming...)</span>
+                    <span className="h-2 w-2 rounded-full bg-blue-400 inline-block animate-ping" />
+                    <Bot className="h-3.5 w-3.5" />
+                    <span>AI Technical Interviewer</span>
+                    <span className="text-gray-500 font-normal">(streaming...)</span>
                   </div>
                   {streamText ? (
                     <MarkdownMessage
                       content={streamText}
                       onLoadCode={(starterCode) => setCode(starterCode)}
+                      onSelectMCQOption={(opt) => void sendTextMessage(opt)}
                     />
                   ) : (
                     <LoadingDots />
@@ -742,19 +825,28 @@ export function InterviewRoom() {
             <div ref={transcriptEndRef} />
           </div>
 
+          {/* Contextual Quick Actions */}
+          <QuickActionBar
+            phase={phase}
+            streaming={streaming}
+            onSend={(text) => void sendTextMessage(text)}
+            onEndInterview={() => void endInterview()}
+          />
+
           {/* Input */}
-          {phase === "evaluate" || phase === "done" ? (
+          {phase === "wrapUp" || phase === "done" ? (
             <div className="flex items-center justify-between border-t border-gray-800 p-3 bg-gray-900/60">
               <span className="text-sm text-green-400 font-medium">
-                Interview completed! Ready to see your evaluation.
+                Interview completed! Ready to generate your evaluation report.
               </span>
               <button
                 type="button"
                 onClick={endInterview}
                 disabled={loading}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
               >
-                {loading ? "Generating Report…" : "View Report 📊"}
+                <FileBarChart className="h-4 w-4" />
+                {loading ? "Generating Report…" : "Generate & View Report"}
               </button>
             </div>
           ) : (
@@ -774,9 +866,10 @@ export function InterviewRoom() {
               <button
                 type="submit"
                 disabled={streaming || !message.trim()}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
               >
-                Send
+                <Send className="h-3.5 w-3.5" />
+                <span>Send</span>
               </button>
             </form>
           )}
@@ -800,15 +893,17 @@ export function InterviewRoom() {
             <div className="flex gap-2">
               <button
                 onClick={runCode}
-                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-700"
               >
-                ▶ Run
+                <Play className="h-3.5 w-3.5 fill-current" />
+                <span>Run</span>
               </button>
               <button
                 onClick={submitCode}
-                className="rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-amber-700"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-amber-700"
               >
-                Submit
+                <Send className="h-3.5 w-3.5" />
+                <span>Submit</span>
               </button>
             </div>
           </div>
@@ -828,17 +923,28 @@ export function InterviewRoom() {
             <div className="flex items-center justify-between border-b border-gray-800 bg-[#161b22] px-4 py-1.5 text-xs">
               <div className="flex items-center gap-2">
                 <span className="font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <span>💻</span> Execution Console
+                  <Terminal className="h-3.5 w-3.5 text-gray-400" />
+                  <span>Execution Console</span>
                 </span>
                 {submissionSummary && (
                   <span
-                    className={`rounded border px-2 py-0.5 text-[11px] font-bold ${
+                    className={`inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[11px] font-bold ${
                       submissionSummary.allPassed
                         ? "border-emerald-500/50 bg-emerald-950/60 text-emerald-400"
                         : "border-red-500/50 bg-red-950/60 text-red-400"
                     }`}
                   >
-                    {submissionSummary.allPassed ? "✓ Accepted" : "✗ Wrong Answer"}
+                    {submissionSummary.allPassed ? (
+                      <>
+                        <Check className="h-3 w-3" />
+                        <span>Accepted</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="h-3 w-3" />
+                        <span>Wrong Answer</span>
+                      </>
+                    )}
                   </span>
                 )}
               </div>
@@ -900,7 +1006,17 @@ export function InterviewRoom() {
                           : "text-red-400"
                       }`}
                     >
-                      <span>{testResults[activeTestIndex].passed ? "✓ Passed" : "✗ Failed"}</span>
+                      {testResults[activeTestIndex].passed ? (
+                        <>
+                          <Check className="h-3.5 w-3.5 text-emerald-400" />
+                          <span>Passed</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-3.5 w-3.5 text-red-400" />
+                          <span>Failed</span>
+                        </>
+                      )}
                       {testResults[activeTestIndex].hidden && (
                         <span className="text-[11px] text-gray-500 font-normal">(Hidden Test)</span>
                       )}

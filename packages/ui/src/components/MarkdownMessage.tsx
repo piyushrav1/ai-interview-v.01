@@ -1,5 +1,19 @@
-import { useState, type FC } from "react";
+import { useState, type FC, type ReactNode } from "react";
 import { marked, type Tokens } from "marked";
+import { InteractiveMCQ, type MCQData } from "./InteractiveMCQ.js";
+import {
+  FileText,
+  AlertTriangle,
+  HelpCircle,
+  Cpu,
+  Copy,
+  Check,
+  ArrowDownToLine,
+  Terminal,
+  Layers,
+  Flag,
+  ClipboardList,
+} from "lucide-react";
 
 // Configure marked with GFM and line breaks
 marked.use({
@@ -10,6 +24,7 @@ marked.use({
 export interface MarkdownMessageProps {
   content: string;
   onLoadCode?: ((code: string) => void) | undefined;
+  onSelectMCQOption?: ((answer: string) => void) | undefined;
   className?: string | undefined;
 }
 
@@ -21,7 +36,7 @@ type ProcessedItem =
       type: "followup_block";
       badge: string;
       badgeStyle: string;
-      icon: string;
+      icon: ReactNode;
       tokens: Tokens.Generic[];
       subList?: Tokens.List | undefined;
     };
@@ -29,6 +44,7 @@ type ProcessedItem =
 export const MarkdownMessage: FC<MarkdownMessageProps> = ({
   content,
   onLoadCode,
+  onSelectMCQOption,
   className = "",
 }) => {
   // Strip any [STARTER_CODE] tags from chat rendering
@@ -37,6 +53,19 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = ({
     .replace(/\[STARTER_CODE\][\s\S]*$/i, "")
     .trim();
 
+  // Extract [MCQ] JSON block if present
+  let mcqData: MCQData | null = null;
+  let textToLex = cleanContent;
+  const mcqMatch = /\[MCQ\]([\s\S]*?)\[\/MCQ\]/i.exec(cleanContent);
+  if (mcqMatch && mcqMatch[1]) {
+    try {
+      mcqData = JSON.parse(mcqMatch[1].trim());
+      textToLex = cleanContent.replace(/\[MCQ\][\s\S]*?\[\/MCQ\]/i, "").trim();
+    } catch {
+      // JSON may be partial while streaming
+    }
+  }
+
   // If this message is presenting a problem, omit code blocks from the chatbox
   const isProblemStatement =
     cleanContent.toLowerCase().includes("problem") ||
@@ -44,7 +73,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = ({
     cleanContent.includes("Constraints");
 
   // Lex raw markdown tokens
-  const rawTokens = marked.lexer(cleanContent);
+  const rawTokens = marked.lexer(textToLex);
 
   // Pre-process tokens to group Examples + Lists, Constraints + Lists, and Follow-up questions
   const items: ProcessedItem[] = [];
@@ -102,21 +131,21 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = ({
       if (isFollowUp) {
         let badge = "Follow-Up";
         let badgeStyle = "bg-purple-500/20 text-purple-300 border-purple-500/40";
-        let icon = "💡";
+        let icon: ReactNode = <HelpCircle size={13} className="text-purple-400" />;
 
         const lower = text.toLowerCase();
         if (lower.includes("complexity") || lower.includes("scale") || lower.includes("time") || lower.includes("space")) {
           badge = "Complexity & Scaling";
           badgeStyle = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
-          icon = "⚡";
+          icon = <Cpu size={13} className="text-emerald-400" />;
         } else if (lower.includes("edge") || lower.includes("empty") || lower.includes("duplicate")) {
           badge = "Edge Case Analysis";
           badgeStyle = "bg-amber-500/20 text-amber-300 border-amber-500/40";
-          icon = "⚠️";
+          icon = <AlertTriangle size={13} className="text-amber-400" />;
         } else if (lower.includes("concept") || lower.includes("dsa") || lower.includes("oop") || lower.includes("database") || lower.includes("linked list")) {
           badge = "Concept Question";
           badgeStyle = "bg-cyan-500/20 text-cyan-300 border-cyan-500/40";
-          icon = "🧠";
+          icon = <Layers size={13} className="text-cyan-400" />;
         }
 
         const nextToken = rawTokens[i + 1];
@@ -184,6 +213,13 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = ({
           />
         );
       })}
+
+      {mcqData && (
+        <InteractiveMCQ
+          data={mcqData}
+          onSelectOption={onSelectMCQOption}
+        />
+      )}
     </div>
   );
 };
@@ -199,36 +235,46 @@ const TokenRenderer: React.FC<{
       const rawTitle = headingToken.text.toLowerCase();
 
       // Select badge & style based on title keywords
-      let badge = "Follow-Up";
-      let badgeStyle = "bg-purple-500/20 text-purple-300 border-purple-500/40";
-      let accentBar = "bg-purple-500";
-      let icon = "💡";
+      let badge = "";
+      let badgeStyle = "bg-gray-800 text-gray-300 border-gray-700";
+      let accentBar = "bg-blue-500";
+      let iconNode: ReactNode = null;
 
-      if (rawTitle.includes("problem") || rawTitle.includes("challenge") || rawTitle.includes("task")) {
+      if (rawTitle.includes("roadmap") || rawTitle.includes("plan") || rawTitle.includes("agenda") || rawTitle.includes("schedule")) {
+        badge = "Roadmap & Plan";
+        badgeStyle = "bg-blue-500/20 text-blue-300 border-blue-500/40";
+        accentBar = "bg-blue-500";
+        iconNode = <ClipboardList size={13} className="text-blue-400" />;
+      } else if (rawTitle.includes("problem") || rawTitle.includes("challenge") || rawTitle.includes("task")) {
         badge = "Problem";
         badgeStyle = "bg-blue-500/20 text-blue-300 border-blue-500/40";
         accentBar = "bg-blue-500";
-        icon = "📌";
+        iconNode = <Terminal size={13} className="text-blue-400" />;
       } else if (rawTitle.includes("complexity") || rawTitle.includes("scaling") || rawTitle.includes("time") || rawTitle.includes("space")) {
         badge = "Complexity";
         badgeStyle = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
         accentBar = "bg-emerald-500";
-        icon = "⚡";
+        iconNode = <Cpu size={13} className="text-emerald-400" />;
       } else if (rawTitle.includes("edge") || rawTitle.includes("case") || rawTitle.includes("test")) {
         badge = "Edge Cases";
         badgeStyle = "bg-amber-500/20 text-amber-300 border-amber-500/40";
         accentBar = "bg-amber-500";
-        icon = "⚠️";
+        iconNode = <AlertTriangle size={13} className="text-amber-400" />;
       } else if (rawTitle.includes("concept") || rawTitle.includes("theory") || rawTitle.includes("dsa") || rawTitle.includes("oop") || rawTitle.includes("database")) {
         badge = "Concept Question";
         badgeStyle = "bg-cyan-500/20 text-cyan-300 border-cyan-500/40";
         accentBar = "bg-cyan-500";
-        icon = "🧠";
+        iconNode = <Layers size={13} className="text-cyan-400" />;
       } else if (rawTitle.includes("wrap") || rawTitle.includes("conclus") || rawTitle.includes("complete")) {
         badge = "Wrap-Up";
         badgeStyle = "bg-indigo-500/20 text-indigo-300 border-indigo-500/40";
         accentBar = "bg-indigo-500";
-        icon = "🎉";
+        iconNode = <Flag size={13} className="text-indigo-400" />;
+      } else if (rawTitle.includes("follow-up") || rawTitle.includes("followup")) {
+        badge = "Follow-Up";
+        badgeStyle = "bg-purple-500/20 text-purple-300 border-purple-500/40";
+        accentBar = "bg-purple-500";
+        iconNode = <HelpCircle size={13} className="text-purple-400" />;
       }
 
       if (depth === 1) {
@@ -248,26 +294,48 @@ const TokenRenderer: React.FC<{
         );
       }
 
-      // Depth 3+ (e.g. ### Follow-Up: Time Complexity, ### The Problem)
+      // Depth 3+ (e.g. ### Follow-Up: Time Complexity, ### The Problem, ### Technical Interview Roadmap & Plan)
+      if (badge) {
+        return (
+          <div className="mt-3 mb-2 flex items-center gap-2.5 rounded-lg bg-gray-900/90 border border-gray-700/70 px-3 py-2 shadow-sm">
+            <span>{iconNode}</span>
+            <span className={`rounded border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${badgeStyle}`}>
+              {badge}
+            </span>
+            <h3 className="text-sm font-semibold text-white flex-1">
+              <InlineTokens tokens={headingToken.tokens} />
+            </h3>
+          </div>
+        );
+      }
+
       return (
-        <div className="mt-3 mb-2 flex items-center gap-2.5 rounded-lg bg-gray-900/90 border border-gray-700/70 px-3 py-2 shadow-sm">
-          <span>{icon}</span>
-          <span className={`rounded border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${badgeStyle}`}>
-            {badge}
-          </span>
-          <h3 className="text-sm font-semibold text-white flex-1">
-            <InlineTokens tokens={headingToken.tokens} />
-          </h3>
-        </div>
+        <h3 className="mt-3 mb-1.5 text-sm font-bold text-white flex items-center gap-2">
+          <span className={`h-3 w-1 ${accentBar} rounded-full inline-block`} />
+          <InlineTokens tokens={headingToken.tokens} />
+        </h3>
       );
     }
 
     case "paragraph": {
       const pToken = token as Tokens.Paragraph;
       return (
-        <p className="my-1.5 leading-relaxed text-gray-200">
+        <p className="my-1.5 leading-relaxed text-gray-200 text-sm">
           <InlineTokens tokens={pToken.tokens} />
         </p>
+      );
+    }
+
+    case "text": {
+      const textToken = token as Tokens.Text;
+      return (
+        <span className="leading-relaxed text-gray-200 text-sm">
+          {textToken.tokens && textToken.tokens.length > 0 ? (
+            <InlineTokens tokens={textToken.tokens} />
+          ) : (
+            <FormattedText text={textToken.text} />
+          )}
+        </span>
       );
     }
 
@@ -285,20 +353,40 @@ const TokenRenderer: React.FC<{
     case "list": {
       const listToken = token as Tokens.List;
       return (
-        <div className="my-2 space-y-2">
+        <div className="my-2.5 space-y-2">
           {listToken.items.map((item, i) => (
             <div key={i} className="flex items-start gap-2.5 text-gray-200">
               {listToken.ordered ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-900/60 border border-blue-500/40 font-mono text-[11px] font-bold text-blue-300 mt-0.5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-900/60 border border-blue-500/40 font-mono text-[11px] font-bold text-blue-300 mt-0.5 select-none">
                   {i + 1}
                 </span>
               ) : (
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
               )}
               <div className="flex-1 leading-relaxed text-sm">
-                {item.tokens.map((t, ti) => (
-                  <TokenRenderer key={ti} token={t} onLoadCode={onLoadCode} />
-                ))}
+                {item.tokens.map((t, ti) => {
+                  if (t.type === "paragraph") {
+                    const pt = t as Tokens.Paragraph;
+                    return (
+                      <p key={ti} className="my-0.5 leading-relaxed">
+                        <InlineTokens tokens={pt.tokens} />
+                      </p>
+                    );
+                  }
+                  if (t.type === "text") {
+                    const tt = t as Tokens.Text;
+                    return (
+                      <span key={ti} className="leading-relaxed">
+                        {tt.tokens && tt.tokens.length > 0 ? (
+                          <InlineTokens tokens={tt.tokens} />
+                        ) : (
+                          <FormattedText text={tt.text} />
+                        )}
+                      </span>
+                    );
+                  }
+                  return <TokenRenderer key={ti} token={t} onLoadCode={onLoadCode} />;
+                })}
               </div>
             </div>
           ))}
@@ -312,7 +400,7 @@ const TokenRenderer: React.FC<{
     case "blockquote": {
       const bqToken = token as Tokens.Blockquote;
       return (
-        <blockquote className="my-2 border-l-4 border-blue-500 bg-gray-900/40 pl-3 py-1.5 text-gray-300 italic rounded-r">
+        <blockquote className="my-2 border-l-4 border-blue-500 bg-gray-900/40 pl-3 py-1.5 text-gray-300 italic rounded-r text-sm">
           {bqToken.tokens.map((t, i) => (
             <TokenRenderer key={i} token={t} onLoadCode={onLoadCode} />
           ))}
@@ -322,7 +410,7 @@ const TokenRenderer: React.FC<{
 
     default:
       if ("text" in token && typeof token.text === "string") {
-        return <p className="my-1">{token.text}</p>;
+        return <p className="my-1 text-sm text-gray-200">{token.text}</p>;
       }
       return null;
   }
@@ -445,7 +533,8 @@ const ExampleCard: React.FC<{
   return (
     <div className="my-3 overflow-hidden rounded-lg border border-blue-500/30 bg-[#0c1322] shadow-md">
       <div className="flex items-center gap-2 border-b border-blue-500/20 bg-blue-950/40 px-3.5 py-1.5 text-xs font-semibold text-blue-300">
-        <span>📋</span> {title || "Example Walkthrough"}
+        <FileText size={13} className="text-blue-400" />
+        <span>{title || "Example Walkthrough"}</span>
       </div>
       <div className="p-3.5 space-y-2 font-mono text-xs text-gray-200">
         {listToken.items.map((item, idx) => {
@@ -505,7 +594,8 @@ const ConstraintsCard: React.FC<{
   return (
     <div className="my-3 overflow-hidden rounded-lg border border-amber-500/30 bg-[#161208] shadow-md">
       <div className="flex items-center gap-2 border-b border-amber-500/20 bg-amber-950/40 px-3.5 py-1.5 text-xs font-semibold text-amber-300">
-        <span>⚠️</span> Constraints & Specifications
+        <AlertTriangle size={13} className="text-amber-400" />
+        <span>Constraints & Specifications</span>
       </div>
       <div className="p-3.5 space-y-1.5 font-mono text-xs text-amber-100/90">
         {listToken.items.map((item, idx) => (
@@ -525,7 +615,7 @@ const ConstraintsCard: React.FC<{
 const FollowUpCard: React.FC<{
   badge: string;
   badgeStyle: string;
-  icon: string;
+  icon: ReactNode;
   tokens: Tokens.Generic[];
   subList?: Tokens.List | undefined;
   onLoadCode?: ((code: string) => void) | undefined;
@@ -588,17 +678,28 @@ const CodeBlockCard: React.FC<{
           {onLoadCode && (
             <button
               onClick={() => onLoadCode(code)}
-              className="rounded bg-blue-600/30 border border-blue-500/40 px-2 py-1 text-xs font-medium text-blue-300 transition hover:bg-blue-600 hover:text-white"
+              className="inline-flex items-center gap-1 rounded bg-blue-600/30 border border-blue-500/40 px-2 py-1 text-xs font-medium text-blue-300 transition hover:bg-blue-600 hover:text-white"
               title="Replace editor code with this starter template"
             >
-              📥 Load into Editor
+              <ArrowDownToLine size={11} />
+              <span>Load into Editor</span>
             </button>
           )}
           <button
             onClick={handleCopy}
-            className="rounded border border-gray-700 bg-gray-800/80 px-2 py-1 text-xs text-gray-300 transition hover:bg-gray-700 hover:text-white"
+            className="inline-flex items-center gap-1 rounded border border-gray-700 bg-gray-800/80 px-2 py-1 text-xs text-gray-300 transition hover:bg-gray-700 hover:text-white"
           >
-            {copied ? "✓ Copied" : "Copy"}
+            {copied ? (
+              <>
+                <Check size={11} className="text-emerald-400" />
+                <span>Copied</span>
+              </>
+            ) : (
+              <>
+                <Copy size={11} />
+                <span>Copy</span>
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -57,6 +57,7 @@ export interface Storage {
   appendTurn(id: string, turn: Turn): Promise<void>;
   saveCodeSnapshot(id: string, snap: CodeSnapshot): Promise<void>;
   saveReport(id: string, report: Report): Promise<void>;
+  updatePhase?(id: string, phase: Phase): Promise<void>;
 }
 
 /**

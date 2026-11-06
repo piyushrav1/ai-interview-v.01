@@ -1,0 +1,83 @@
+{
+  "id": "strong-03-valid-palindrome",
+  "category": "strong",
+  "problemSlug": "valid-palindrome",
+  "language": "javascript",
+  "description": "Two-pointer in-place alphanumeric filtering with O(n) time and O(1) space.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Let's examine Valid Palindrome."
+    },
+    {
+      "role": "candidate",
+      "text": "Hi! The problem asks to verify if a string is a palindrome considering only alphanumeric characters and ignoring cases. An intuitive way is creating a new cleaned string, but that requires O(n) extra memory. Instead, we can use two pointers: left starting at 0, right at s.length - 1."
+    },
+    {
+      "role": "interviewer",
+      "text": "How do the two pointers handle non-alphanumeric characters?"
+    },
+    {
+      "role": "candidate",
+      "text": "While left < right, we skip non-alphanumeric characters by advancing left or decrementing right. When both point to valid characters, we compare them in lower case. If they mismatch, return false. If loop finishes, return true."
+    },
+    {
+      "role": "interviewer",
+      "text": "Excellent. What is the space complexity?"
+    },
+    {
+      "role": "candidate",
+      "text": "Space complexity is O(1) auxiliary space because we do not allocate any new strings or arrays, just two integer indices."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 2,
+      "timeMs": 180000,
+      "source": "class Solution {\n  isPalindrome(s) {\n    let l = 0, r = s.length - 1;\n    const isAlphaNum = (ch) => /[a-z0-9]/i.test(ch);\n    while (l < r) {\n      while (l < r && !isAlphaNum(s[l])) l++;\n      while (l < r && !isAlphaNum(s[r])) r--;\n      if (s[l].toLowerCase() !== s[r].toLowerCase()) return false;\n      l++;\n      r--;\n    }\n    return true;\n  }\n}"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 4,
+      "max": 4
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 4,
+        "max": 4
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 3,
+        "max": 4
+      },
+      "complexityReasoning": {
+        "min": 4,
+        "max": 4
+      },
+      "communication": {
+        "min": 4,
+        "max": 4
+      }
+    },
+    "needsHumanReview": false
+  }
+}

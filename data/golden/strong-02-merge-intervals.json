@@ -1,0 +1,87 @@
+{
+  "id": "strong-02-merge-intervals",
+  "category": "strong",
+  "problemSlug": "merge-intervals",
+  "language": "cpp",
+  "description": "C++ solution sorting by start time, merging in-place with O(n log n) time and O(1) extra space.",
+  "transcript": [
+    {
+      "role": "interviewer",
+      "text": "Welcome! Let's solve Merge Intervals."
+    },
+    {
+      "role": "candidate",
+      "text": "Hello! If intervals are not sorted initially, adjacent intervals might not be contiguous in the array. So the first step is sorting by start time. That takes O(n log n)."
+    },
+    {
+      "role": "interviewer",
+      "text": "Good observation. How will you merge them after sorting?"
+    },
+    {
+      "role": "candidate",
+      "text": "We maintain our merged list. For each interval, if merged is empty or current.start > merged.back().end, there is no overlap, so we push it. Otherwise, there is an overlap, so merged.back().end = max(merged.back().end, current.end)."
+    },
+    {
+      "role": "interviewer",
+      "text": "What edge cases did you consider?"
+    },
+    {
+      "role": "candidate",
+      "text": "1. Empty or single interval array. 2. Completely non-overlapping intervals. 3. One interval fully inside another like [1, 5] and [2, 3]. 4. Touching boundaries like [1, 4] and [4, 6] which should merge into [1, 6]."
+    }
+  ],
+  "codeSnapshots": [
+    {
+      "turnId": 3,
+      "timeMs": 240000,
+      "source": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<vector<int>> merge(vector<vector<int>>& intervals) {\n        if (intervals.empty()) return {};\n        sort(intervals.begin(), intervals.end());\n        vector<vector<int>> merged;\n        for (const auto& interval : intervals) {\n            if (merged.empty() || merged.back()[1] < interval[0]) {\n                merged.push_back(interval);\n            } else {\n                merged.back()[1] = max(merged.back()[1], interval[1]);\n            }\n        }\n        return merged;\n    }\n};"
+    }
+  ],
+  "testResults": [
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": false
+    },
+    {
+      "passed": true,
+      "hidden": true
+    },
+    {
+      "passed": true,
+      "hidden": true
+    }
+  ],
+  "expected": {
+    "overallScore": {
+      "min": 4,
+      "max": 4
+    },
+    "rubricScores": {
+      "problemSolving": {
+        "min": 4,
+        "max": 4
+      },
+      "codeCorrectness": {
+        "min": 4,
+        "max": 4
+      },
+      "testingEdgeCases": {
+        "min": 4,
+        "max": 4
+      },
+      "complexityReasoning": {
+        "min": 4,
+        "max": 4
+      },
+      "communication": {
+        "min": 4,
+        "max": 4
+      }
+    },
+    "needsHumanReview": false
+  }
+}
