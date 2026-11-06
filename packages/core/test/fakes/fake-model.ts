@@ -1,7 +1,6 @@
-import type { AIModel, Interview, Turn, Phase, Language } from "@testmeman/core";
-import { PhaseEnum, TurnRoleEnum } from "@testmeman/contracts";
+import type { AIModel, Phase } from "../../src/adapters.js";
+import { PhaseEnum } from "@testmeman/contracts";
 import { z } from "zod";
-import type { EvaluatorOutput } from "../../src/prompts/v1/evaluator.js";
 
 /**
  * Fake AI model for development and testing.
@@ -9,7 +8,6 @@ import type { EvaluatorOutput } from "../../src/prompts/v1/evaluator.js";
  */
 export class FakeModel implements AIModel {
   private currentPhase: Phase = PhaseEnum.plan;
-  private conversation = "";
   private turnCount = 0;
 
   async *chat(input: {
@@ -17,7 +15,6 @@ export class FakeModel implements AIModel {
     messages: { role: "interviewer" | "candidate"; text: string }[];
     signal?: AbortSignal;
   }): AsyncIterable<string> {
-    this.conversation = messages.map((m) => `${m.role}: ${m.text}`).join("\n");
     this.turnCount++;
 
     const phase = this.determinePhaseFromContext(input.messages);
@@ -29,7 +26,7 @@ export class FakeModel implements AIModel {
         response = this.getIntroResponse();
         break;
       case PhaseEnum.problem:
-        response = await this.getProblemResponse(input.messages);
+        response = this.getProblemResponse();
         break;
       case PhaseEnum.coding:
         response = this.getCodingResponse(input.messages);
@@ -38,7 +35,7 @@ export class FakeModel implements AIModel {
         response = this.getFollowUpResponse(input.messages);
         break;
       case PhaseEnum.concepts:
-        response = this.getConceptResponse(input.messages);
+        response = this.getConceptResponse();
         break;
       case PhaseEnum.wrapUp:
         response = this.getWrapUpResponse();
@@ -54,31 +51,26 @@ export class FakeModel implements AIModel {
     }
   }
 
-  async structured<T>(params: {
+  async structured<T>(_params: {
     system: string;
     prompt: string;
     schema: z.ZodType<T>;
     temperature?: number;
   }): Promise<T> {
-    if (params.schema.description?.includes("Evaluator")) {
-      // Return mock evaluator output
-      return {
-        overallScore: 3,
-        rubricScores: [
-          { dimension: "problemSolving", score: 3, evidence: "Candidate explained their approach clearly." },
-          { dimension: "codeCorrectness", score: 4, evidence: "Solution passes all tests." },
-          { dimension: "testingEdgeCases", score: 2, evidence: "Did not consider empty input case." },
-          { dimension: "complexityReasoning", score: 3, evidence: "Discussed O(n) complexity." },
-          { dimension: "communication", score: 4, evidence: "Clear explanations throughout." },
-        ],
-        strengths: ["Good problem-solving approach", "Clean code style"],
-        gaps: ["Could optimize for edge cases", "Considered space complexity"],
-        needsHumanReview: false,
-      } as T;
-    }
-
-    // Default mock response
-    return {} as T;
+    // Return mock evaluator output
+    return {
+      overallScore: 3,
+      rubricScores: [
+        { dimension: "problemSolving", score: 3, evidence: "Candidate explained their approach." },
+        { dimension: "codeCorrectness", score: 4, evidence: "Solution passes all tests." },
+        { dimension: "testingEdgeCases", score: 2, evidence: "Missing edge case handling." },
+        { dimension: "complexityReasoning", score: 3, evidence: "Discussed O(n) complexity." },
+        { dimension: "communication", score: 4, evidence: "Clear explanations." },
+      ],
+      strengths: ["Good problem-solving", "Clean code"],
+      gaps: ["Edge cases"],
+      needsHumanReview: false,
+    } as T;
   }
 
   private determinePhaseFromContext(messages: { role: "interviewer" | "candidate"; text: string }[]): Phase {
@@ -93,34 +85,31 @@ export class FakeModel implements AIModel {
   }
 
   private getIntroResponse(): string {
-    return `Hello! I'm your interviewer for this technical interview.
+    return `Hello! I'm your interviewer.
 
 Here's how this interview will go:
-1. I'll present a coding problem
-2. You'll code in the editor
-3. I'll ask follow-up questions about your solution
-4. Then 3 short concept questions
-5. Finally, we wrap up and you get a report
+1. I present a coding problem
+2. You code in the editor
+3. I ask follow-up questions
+4. Then 3 concept questions
+5. We wrap up with a report
 
-The interview is 30 minutes total. Ready to begin?`;
+Ready?`;
   }
 
-  private async getProblemResponse(messages: { role: "interviewer" | "candidate"; text: string }[]): Promise<string> {
-    const problemMessages = messages.filter((m) => m.role === "candidate");
-    if (problemMessages.length > 0) {
-      return `I've presented the problem. You can now start coding in your preferred language.
-Type '/run' when you want to test your solution against the sample tests.`;
-    }
-    return `Let me present the coding problem...`;
+  private getProblemResponse(): string {
+    return `Here's your coding problem:
+
+**Two Sum**
+Given an array of integers and a target, return indices of two numbers that add up to the target.
+
+Start coding. Type '/run' to test your solution.`;
   }
 
   private getCodingResponse(messages: { role: "interviewer" | "candidate"; text: string }[]): string {
     const candidateMessage = messages.find((m) => m.role === "candidate");
     if (candidateMessage?.text.includes("done") || candidateMessage?.text.includes("/submit")) {
-      return `I see your solution is complete. Let me run the hidden tests to verify.`;
-    }
-    if (candidateMessage?.text.includes("help") || candidateMessage?.text.includes("stuck")) {
-      return `Sure, what part are you working on? Remember, try to think through it first.`;
+      return `I see your solution is complete. Running tests...`;
     }
     return `Keep coding! Type '/run' to test against sample inputs.`;
   }
@@ -128,16 +117,16 @@ Type '/run' when you want to test your solution against the sample tests.`;
   private getFollowUpResponse(messages: { role: "interviewer" | "candidate"; text: string }[]): string {
     const candidateMessage = messages.find((m) => m.role === "candidate");
     if (candidateMessage?.text.toLowerCase().includes("time complexity")) {
-      return `Good question! My approach is O(n) time and O(1) space because...`;
+      return `My approach is O(n) time - I use a hash map to store seen values.`;
     }
-    return `Let me ask you about your solution. Why did you choose this data structure?`;
+    return `Why did you choose this data structure? Can you discuss the time complexity?`;
   }
 
-  private getConceptResponse(messages: { role: "interviewer" | "candidate"; text: string }[]): string {
+  private getConceptResponse(): string {
     return `Quick concept question: What's the difference between a class and an object in OOP?`;
   }
 
   private getWrapUpResponse(): string {
-    return `Thanks for your time! The interview is now complete. I'll run the evaluator to generate your report.`;
+    return `Thanks for your time! Let me generate your report.`;
   }
 }
